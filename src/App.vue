@@ -4,19 +4,19 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div> -->
-    <Header></Header>
+    <MobileHeader></MobileHeader>
     <router-view />
   </div>
 </template>
 
 <script>
 
-import Header from "./components/Header";
+import MobileHeader from "./components/MobileHeader";
 
 export default {
   name: 'app',
   components: {
-    Header,
+    MobileHeader,
   }
 }
 </script>
