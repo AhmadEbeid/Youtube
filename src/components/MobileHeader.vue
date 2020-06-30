@@ -27,7 +27,7 @@
         }
       },
       search() {
-        console.log('search started')
+        console.log('search started');
       }
     },
     created() {

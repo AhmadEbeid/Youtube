@@ -1,17 +1,17 @@
 <template>
   <div class="home">
-
+    <MobileSubHeader/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-// import  from "@/components/";
+import MobileSubHeader from "@/components/MobileSubHeader.vue";
 
 export default {
   name: "Home",
   components: {
-
+    MobileSubHeader
   },
   data: function () {
     return {}
