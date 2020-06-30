@@ -10,21 +10,21 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: Home,
   },
   {
     path: "/video/:id",
     name: "Video",
-    component: VideoDetails
+    component: VideoDetails,
   },
   {
     path: "/channel/:id",
     name: "Channel",
-    component: ChannelDetails
+    component: ChannelDetails,
   },
   {
     path: "*",
-    redirect: { name: 'Home' },
+    redirect: { name: "Home" },
   },
 ];
 
@@ -32,13 +32,13 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     } else {
-      return { x: 0, y: 0 }
+      return { x: 0, y: 0 };
     }
-  }
+  },
 });
 
 export default router;
