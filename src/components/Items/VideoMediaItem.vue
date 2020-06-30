@@ -30,9 +30,6 @@
     props: {
       item: Object,
     },
-    methods: {
-
-    },
     created() {
       this.id = this.item.id.videoId;
       this.channelId = this.item.snippet.channelId;

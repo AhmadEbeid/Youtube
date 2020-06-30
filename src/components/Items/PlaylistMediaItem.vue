@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="playlist-media-item__body-container">
-        <p class="playlist-media-item__body-container__title">{{ title }}</p>
+        <p class="playlist-media-item__body-container__title" v-html="title"></p>
         <p class="playlist-media-item__body-container__channel-name">{{ channelTitle }}</p>
       </div>
     </div>
@@ -19,18 +19,22 @@
     name: "PlaylistMediaItem",
     data: function () {
       return {
-        imgUrl: 'https://i.ytimg.com/vi/sQxH5Va5YmI/mqdefault.jpg',
-        itemCount: '17',
-        title: 'Pagey',
-        channelTitle: 'Cory Britton',
-        // Number(viewCount).toLocaleString()
+        id: '',
+        imgUrl: '',
+        itemCount: '',
+        title: '',
+        channelTitle: '',
       }
     },
-    methods: {
-
+    props: {
+      item: Object,
     },
     created() {
-      
+      this.id = this.item.id.videoId;
+      this.imgUrl = this.item.snippet.thumbnails.medium.url;
+      this.title = this.item.snippet.title;
+      this.channelTitle = this.item.snippet.channelTitle;
+      this.itemCount = this.item.contentDetails.itemCount
     }
   };
 </script>

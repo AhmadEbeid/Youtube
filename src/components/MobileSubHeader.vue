@@ -17,6 +17,9 @@
 </template>
 
 <script>
+
+  import { bus } from '../main'
+
   export default {
     name: "MobileSubHeader",
     data: function () {
@@ -28,9 +31,10 @@
     },
     methods: {
         typeSearch() {
-            console.log(this.type);
+            this.$router.push({ query: Object.assign({}, this.$route.query, { type: this.type }) });
+            bus.$emit('searchBy');
         },
-        publishedAfterSearch() {
+        publishDateCalculate() {
             const date = new Date();
             if ( this.time === 'today' ) {
                 date.setDate(date.getDate() - 1);
@@ -47,8 +51,17 @@
             } else {
                 this.publishedAfter = '';
             }
-            console.log(this.publishedAfter);
+        },
+        publishedAfterSearch() {
+            this.publishDateCalculate();
+            this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: this.publishedAfter, time: this.time }) });
+            bus.$emit('searchBy');
         }
+    },
+    created() {
+        this.$route.query.type ? this.type = this.$route.query.type: this.type = '';
+        this.$route.query.time ? this.time = this.$route.query.time: this.time = '';
+        this.publishDateCalculate();
     }
   };
 </script>

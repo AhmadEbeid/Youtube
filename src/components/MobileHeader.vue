@@ -1,20 +1,23 @@
 <template>
     <header class="header">
       <img class="header__logo" src="../assets/logo-youtube.svg" alt="logo">
-      <input v-if="searchFlag" @keyup.enter="search" v-model="searchInput" class="header__search_input" type="search" name="" id="">
+      <input ref="search" v-if="searchFlag" @keyup.enter="search" v-model="searchInput" class="header__search_input" type="search" name="" id="">
       <span v-else class="header__title">{{ title }}</span>
       <img @click="showSearch" class="header__search_icon" src="../assets/icon-search.svg" alt="search">
     </header>
 </template>
 
 <script>
+
+  import { bus } from '../main'
+  
   export default {
     name: "MobileHeader",
     data: function () {
       return {
         searchFlag: false,
         searchInput: '',
-        title: 'SpongBob Square Pants'
+        title: ''
       }
     },
     methods: {
@@ -24,14 +27,30 @@
           this.search();
         } else {
           this.searchFlag = !this.searchFlag;
+          
+          // set focus to search
+          if (this.searchFlag) {
+            const timeout = setTimeout(() => {
+              this.$refs.search.focus();
+              clearTimeout(timeout);
+            }, 1);
+          }
         }
       },
       search() {
-        console.log('search started');
+        // this.$router.replace.({ query: {q: this.searchInput} })
+        if (this.$route.query.q !== this.searchInput) {
+          this.$router.push({ query: Object.assign({}, this.$route.query, { q: this.searchInput }) });
+          bus.$emit('searchBy');
+  
+          this.title = this.searchInput;
+        }
+        this.searchInput = '';
+        this.searchFlag = false;
       }
     },
     created() {
-      
+      this.$route.query.q ? this.title = this.$route.query.q: this.title = '';
     }
   };
 </script>
