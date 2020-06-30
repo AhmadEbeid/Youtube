@@ -25,7 +25,7 @@
     },
     created() {
       if (!this.item.statistics) {
-        const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${this.item.id.channelId}&part=statistics&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`
+        const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${this.item.id.channelId}&part=statistics&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
         axios.get(channelLink)
         .then(res => {
           res.data.items.forEach(item => {

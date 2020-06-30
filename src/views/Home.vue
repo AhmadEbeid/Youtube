@@ -56,16 +56,21 @@ export default {
       nextPageToken: '',
       totalResults: -1,
       bottomOfWindowFlag: false,
+      lastScrollUpdate: 0,
     }
   },
   methods: {
     getData({q, type, publishedAfter, order, pageToken, prevList = []}) {
       this.items = [];
 
-      if (!prevList.length) this.loading = true;
-      else this.moreLoading = true;
+      if (!prevList.length) {
+         this.loading = true
+         this.mediaItems = [];
+      } else {
+        this.moreLoading = true
+      }
       
-      const link = [`https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`];
+      const link = [`https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`];
 
       q ? link.push(`&q=${q}`) : '';
       type ? link.push(`&type=${type}`) : '';
@@ -100,24 +105,27 @@ export default {
     },
     scroll () {
       window.onscroll = () => {
-        let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, 
-        document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight
-
-        if (bottomOfWindow && !this.bottomOfWindowFlag) {
-          console.log(bottomOfWindow)
-          console.log(Math.max(window.pageYOffset, document.documentElement.scrollTop, 
-        document.body.scrollTop) + window.innerHeight)
-          console.log(document.documentElement.offsetHeight)
-        } else {
-          setTimeout(() => {
-            this.bottomOfWindowFlag = false;
-          }, 100);
+        var scrollBar = document.documentElement;
+        if (scrollBar.scrollTop + scrollBar.clientHeight >= scrollBar.scrollHeight-20){
+            var t = new Date().getTime();
+            if ( t - this.lastScrollUpdate > 3000){
+                this.lastScrollUpdate=t;
+                const searchDetails = {
+                  q: this.$route.query.q,
+                  type: this.$route.query.type,
+                  publishedAfter: this.$route.query.publishedAfter,
+                  order: this.$route.query.order,
+                  pageToken: this.nextPageToken,
+                  prevList: JSON.parse(JSON.stringify(this.mediaItems))
+                }
+                this.getData(searchDetails);
+            }
         }
       }
     }
   },
   mounted () {
-    this.scroll()
+    // this.scroll()
   },
   created() {
     const searchDetails = {

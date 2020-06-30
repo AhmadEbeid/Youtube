@@ -30,7 +30,7 @@
     },
     created() {
       if (!this.item.contentDetails) {
-        const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${this.item.id.playlistId}&part=contentDetails&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`
+        const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${this.item.id.playlistId}&part=contentDetails&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
         axios.get(playlistLink)
         .then(res => {
           res.data.items.forEach(item => {

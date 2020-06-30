@@ -40,7 +40,7 @@
     },
     created() {
       if (!this.item.statisticsInfo) {
-        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.item.id.videoId}&part=contentDetails,statistics&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`
+        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.item.id.videoId}&part=contentDetails,statistics&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
         axios.get(videoLink)
         .then(res => {
           res.data.items.forEach(item => {
