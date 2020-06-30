@@ -95,7 +95,7 @@ export default {
 
 @media (min-width: 768px) {
   .channel-media-item {
-    padding: 10px 10vw;
+    padding: 10px 15vw;
     grid-template-columns: 310px auto;
     grid-gap: 30px;
 

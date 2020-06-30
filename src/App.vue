@@ -5,6 +5,7 @@
       <router-link to="/about">About</router-link>
     </div> -->
     <MobileHeader class="desktop-hidden" />
+    <DesktopHeader class="mobile-hidden" />
     <router-view />
   </div>
 </template>
@@ -12,11 +13,13 @@
 <script>
 
 import MobileHeader from "./components/mobile/MobileHeader";
+import DesktopHeader from "./components/desktop/DesktopHeader";
 
 export default {
   name: 'app',
   components: {
     MobileHeader,
+    DesktopHeader
   }
 }
 </script>

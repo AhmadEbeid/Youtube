@@ -199,7 +199,7 @@ export default {
 // desktop
 @media (min-width: 768px) {
   .video-media-item {
-    padding: 10px 10vw;
+    padding: 10px 15vw;
     grid-template-columns: 310px auto;
     grid-gap: 30px;
 
