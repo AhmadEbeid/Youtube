@@ -1,6 +1,6 @@
 <template>
   <div class="video-details-page">
-    <template v-if="false">
+    <template v-if="loading">
       <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
     </template>
     <template v-else>
@@ -11,18 +11,23 @@
         ></iframe>
       </div>
       <div class="video-details-page__video-info">
-        <h1 class="video-details-page__video-info__title">{{ this.videoData.snippet.title }}</h1>
+        <h1 class="video-details-page__video-info__title">{{ videoData.snippet.title }}</h1>
         <p class="video-details-page__video-info__sub-title">
-          {{ this.videoData.snippet.channelTitle }}
-          <span
-            class="video-details-page__video-info__sub-title__span"
-          >
+          <span class="video-details-page__video-info__sub-title__span">
+            <span v-if="!desktopFlag">{{ this.videoData.snippet.channelTitle }}</span>
             {{
-            Number(this.videoData.statistics.viewCount).toLocaleString()
+            Number(videoData.statistics.viewCount).toLocaleString()
             }}
             views
           </span>
         </p>
+      </div>
+      <div class="video-details-page__video-sub-info">
+        <img class="video-details-page__video-sub-info__img" v-bind:src="videoData.snippet.thumbnails.default.url" alt />
+        <div>
+          <p class="video-details-page__video-sub-info__title">{{videoData.snippet.channelTitle}}</p>
+          <p class="video-details-page__video-sub-info__info">Published on {{publishedAt(videoData.snippet.publishedAt)}}</p>
+        </div>
       </div>
       <div class="video-details-page__related-video-container">
         <template v-if="loading2">
@@ -65,7 +70,7 @@ export default {
       videosResJson: {},
       loading: true,
       loading2: true,
-      desktopFlag: false,
+      desktopFlag: false
     };
   },
   methods: {
@@ -101,6 +106,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    publishedAt(date) {
+      date = (new Date(date)).toDateString().split(" ")
+      return date[2] + " " + date[1] + " " + date[3];
     }
   },
   created() {
@@ -162,27 +171,15 @@ export default {
       margin-top: 15px;
       margin-bottom: 15px;
       border-bottom: 1px solid #e0e0e0;
+    }
 
-      &__title {
-        font-size: 22px;
-        font-weight: bold;
-      }
-
-      &__sub-title {
-        font-size: 17px;
-        margin-top: 10px;
-        margin-bottom: 15px;
-
-        &__span {
-          color: #000000ad;
-        }
-      }
+    &__video-sub-info {
+      display: none !important;
     }
   }
 }
 
 @media (min-width: 768px) {
-
   .video-details-page {
     padding: 0px 15vw;
     background-color: #f9f9f9;
@@ -195,7 +192,6 @@ export default {
         width: 100%;
         height: 37vw;
       }
-
     }
 
     &__video-info {
@@ -213,7 +209,7 @@ export default {
       &__sub-title {
         font-size: 18px;
         margin-top: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 0px;
 
         &__span {
           color: #000000ad;
@@ -221,11 +217,39 @@ export default {
       }
     }
 
+    &__video-sub-info {
+      padding: 25px 10px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      border-bottom: 1px solid #e0e0e0;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      
+
+      &__img {
+        width: 70px;
+        height: 70px;
+        border-radius: 100%;
+        margin-right: 20px;
+      }
+
+      &__title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      &__info {
+        font-size: 16px;
+        margin-top: 5px;
+        color: #000000ad;
+      }
+    }
+
     &__related-video-container {
       padding: 0px 10px;
       background-color: white;
     }
-
   }
 }
 </style>
