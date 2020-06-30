@@ -76,7 +76,7 @@ export default {
         this.moreLoading = true
       }
       
-      const link = [`https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyCOjhnkMdKb2Po1OLbYhK3NN9vchKEdEcU`];
+      const link = [`https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`];
 
       q ? link.push(`&q=${q}`) : '';
       type ? link.push(`&type=${type}`) : '';
@@ -97,17 +97,17 @@ export default {
         
 
         if (videoIds.length) {
-          const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(",")}&part=contentDetails,statistics&key=AIzaSyCOjhnkMdKb2Po1OLbYhK3NN9vchKEdEcU`
+          const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(",")}&part=contentDetails,statistics&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`
           const videosRes = await axios.get(videoLink);
           this.videosResJson = videosRes.data.items.reduce((json, value) => { json[value.id] = { stats: value.statistics, contentDetails: value.contentDetails }; return json; }, {});
         }
         if (playlistIds.length) {
-          const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${playlistIds.join(",")}&part=contentDetails&key=AIzaSyCOjhnkMdKb2Po1OLbYhK3NN9vchKEdEcU`
+          const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${playlistIds.join(",")}&part=contentDetails&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`
           const playlistsRes = await axios.get(playlistLink);
           this.playlistsResJson = playlistsRes.data.items.reduce((json, value) => { json[value.id] = value.contentDetails; return json; }, {});
         }
         if (channelIds.length) {
-          const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${channelIds.join(",")}&part=statistics&key=AIzaSyCOjhnkMdKb2Po1OLbYhK3NN9vchKEdEcU`
+          const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${channelIds.join(",")}&part=statistics&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`
           const channelsRes = await axios.get(channelLink);
           this.channelsResJson = channelsRes.data.items.reduce((json, value) => { json[value.id] = value.statistics; return json; }, {});
         }

@@ -1,6 +1,6 @@
 <template>
     <header class="header">
-      <img class="header__logo" src="../../assets/logo-youtube.svg" alt="logo">
+      <img @click="$router.push({ name: 'Home' })" class="header__logo" src="../../assets/logo-youtube.svg" alt="logo">
       <input ref="search" v-if="searchFlag" @keyup.enter="search" v-model="searchInput" class="header__search_input" type="search" name="" id="">
       <span v-else class="header__title">{{ title }}</span>
       <img @click="showSearch" class="header__search_icon" src="../../assets/icon-search.svg" alt="search">
@@ -39,6 +39,7 @@
       },
       search() {
         // this.$router.replace.({ query: {q: this.searchInput} })
+        this.$router.push({ name: 'Home'})
         if (this.$route.query.q !== this.searchInput) {
           this.$router.push({ query: Object.assign({}, this.$route.query, { q: this.searchInput }) });
           bus.$emit('searchBy', { q: this.searchInput });
@@ -51,6 +52,10 @@
     },
     created() {
       this.$route.query.q ? this.title = this.$route.query.q: this.title = '';
+
+      bus.$on('resetHeaderTitle', () => {
+        this.title = 'Youtube';
+      });
     }
   };
 </script>
