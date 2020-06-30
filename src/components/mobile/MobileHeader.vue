@@ -1,15 +1,15 @@
 <template>
     <header class="header">
-      <img class="header__logo" src="../assets/logo-youtube.svg" alt="logo">
+      <img class="header__logo" src="../../assets/logo-youtube.svg" alt="logo">
       <input ref="search" v-if="searchFlag" @keyup.enter="search" v-model="searchInput" class="header__search_input" type="search" name="" id="">
       <span v-else class="header__title">{{ title }}</span>
-      <img @click="showSearch" class="header__search_icon" src="../assets/icon-search.svg" alt="search">
+      <img @click="showSearch" class="header__search_icon" src="../../assets/icon-search.svg" alt="search">
     </header>
 </template>
 
 <script>
 
-  import { bus } from '../main'
+  import { bus } from '../../main'
   
   export default {
     name: "MobileHeader",
@@ -41,7 +41,7 @@
         // this.$router.replace.({ query: {q: this.searchInput} })
         if (this.$route.query.q !== this.searchInput) {
           this.$router.push({ query: Object.assign({}, this.$route.query, { q: this.searchInput }) });
-          bus.$emit('searchBy');
+          bus.$emit('searchBy', { q: this.searchInput });
   
           this.title = this.searchInput;
         }

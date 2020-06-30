@@ -1,5 +1,5 @@
 <template>
-    <div v-if="loaded" class="playlist-media-item">
+    <div v-if="loaded && item.snippet.thumbnails" class="playlist-media-item">
       <div class="playlist-media-item__image-container">
         <img class="playlist-media-item__image-container__img" v-bind:src="item.snippet.thumbnails.medium.url" alt="">
         <div v-if="item.contentDetails" class="playlist-media-item__image-container__div">
@@ -10,13 +10,12 @@
       <div class="playlist-media-item__body-container">
         <p class="playlist-media-item__body-container__title" v-html="item.snippet.title"></p>
         <p class="playlist-media-item__body-container__channel-name">{{ item.snippet.channelTitle }}</p>
+        <p class="playlist-media-item__body-container__description" v-html="item.snippet.description"></p>
       </div>
     </div>
 </template>
 
 <script>
-
-  import axios from "axios";
 
   export default {
     name: "PlaylistMediaItem",
@@ -27,21 +26,11 @@
     },
     props: {
       item: Object,
+      contentDetails: Object,
     },
     created() {
-      if (!this.item.contentDetails) {
-        const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${this.item.id.playlistId}&part=contentDetails&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
-        axios.get(playlistLink)
-        .then(res => {
-          res.data.items.forEach(item => {
-            this.item.contentDetails = item.contentDetails;
-            this.loaded = true;
-          })
-        })
-        .catch(err => console.log(err));
-      } else {
-        this.loaded = true;
-      }
+      this.item.contentDetails = this.contentDetails;
+      this.loaded = true;
     }
   };
 </script>
@@ -107,6 +96,16 @@
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         margin-bottom: 5px;
+      }
+
+      &__description {
+        display: none !important;
+        color: #000000ad;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
       }
 
     }

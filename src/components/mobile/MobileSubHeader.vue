@@ -18,7 +18,7 @@
 
 <script>
 
-  import { bus } from '../main'
+  import { bus } from '../../main'
 
   export default {
     name: "MobileSubHeader",
@@ -31,15 +31,8 @@
     },
     methods: {
         typeSearch() {
-            bus.$emit('searchBy');
-
-            if (this.type) {
-                this.$router.push({ query: Object.assign({}, this.$route.query, { type: this.type }) });
-            } else {
-                this.$router.push({ query: Object.assign({}, this.$route.query, { type: null }) });
-            }
-            
-            bus.$emit('searchBy');
+            this.$router.push({ query: Object.assign({}, this.$route.query, { type: this.type }) });
+            bus.$emit('searchBy', { type: this.type });
         },
         publishDateCalculate() {
             const date = new Date();
@@ -61,14 +54,9 @@
         },
         publishedAfterSearch() {
             this.publishDateCalculate();
-
-            if (this.publishedAfter) {
-                this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: this.publishedAfter, time: this.time }) });
-            } else {
-                this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: null, time: null }) });
-            }
+            this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: this.publishedAfter, time: this.time }) });
+            bus.$emit('searchBy', { publishedAfter: this.publishedAfter, time: this.time });
             
-            bus.$emit('searchBy');
         }
     },
     created() {
@@ -90,7 +78,7 @@
         border-bottom: 1px solid #e0e0e0;
 
         &__select {
-            background-color: #f5f5f5;
+            background-color: #f9f9f9;
             border-radius: 3px;
             border: 2px solid #e0e0e0;
             margin-right: 10px;

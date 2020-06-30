@@ -1,6 +1,6 @@
 <template>
     <div v-bind:class="{'loading-container': viewText, 'loading-container-no-text': !viewText}">
-        <img v-bind:class="{'loading-container__img': viewText, 'loading-container-no-text__img': !viewText}" src="../assets/loader.svg" alt="">
+        <img v-bind:class="{'loading-container__img': viewText, 'loading-container-no-text__img': !viewText}" src="../../assets/loader.svg" alt="">
         <p v-if="viewText" class="loading-container__txt">Loading</p>
     </div>
 </template>
