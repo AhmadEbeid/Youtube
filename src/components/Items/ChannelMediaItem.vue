@@ -1,0 +1,84 @@
+<template>
+    <div class="channel-media-item">
+      <img class="channel-media-item__img" v-bind:src="imgUrl" alt="">
+      <div class="channel-media-item__body-container">
+        <p class="channel-media-item__body-container__title">{{ title }}</p>
+        <p class="channel-media-item__body-container__video-count">{{ Number(videoCount).toLocaleString() }} videos</p>
+        <p class="channel-media-item__body-container__subscribers">{{ Number(subscriberCount).toLocaleString() }} subscribers</p>
+      </div>
+    </div>
+</template>
+
+<script>
+  export default {
+    name: "ChannelMediaItem",
+    data: function () {
+      return {
+        imgUrl: 'https://yt3.ggpht.com/-UJfSpSw_u0E/AAAAAAAAAAI/AAAAAAAAAAA/y7Q92h4x1Fs/s240-c-k-no-mo-rj-c0xffffff/photo.jpg',
+        title: 'Pagey',
+        videoCount: '1734',
+        subscriberCount: '283000',
+        // Number(viewCount).toLocaleString()
+      }
+    },
+    methods: {
+
+    },
+    created() {
+      
+    }
+  };
+</script>
+
+<style scoped lang="scss">
+
+  .channel-media-item {
+    padding: 10px 15px;
+    display: grid;
+    grid-template-columns: 90px auto;
+    grid-gap: 10px;
+    align-items: center;
+    cursor: pointer;
+
+    &__img {
+      width: 90px;
+      height: 90px;
+      border-radius: 100%;
+    }
+
+    &__body-container {
+
+      &__title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        margin-bottom: 5px;
+      }
+
+      &__video-count {
+        font-size: 15px;
+        color: #000000ad;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        margin-bottom: 5px;
+      }
+
+      &__subscribers {
+        font-size: 15px;
+        color: #000000ad;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
+
+    }
+  }
+
+</style>
