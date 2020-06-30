@@ -58,6 +58,7 @@
         height: 55px;
         padding-left: 15px;
         padding-right: 15px;
+        margin-bottom: 15px;
         display: flex;
         align-items: center;
         border-bottom: 1px solid #e0e0e0;

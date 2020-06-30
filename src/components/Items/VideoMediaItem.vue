@@ -5,7 +5,7 @@
         <span class="video-media-item__image-container__span">{{ duration }}</span>
       </div>
       <div class="video-media-item__body-container">
-        <p class="video-media-item__body-container__title">{{ title }}</p>
+        <p class="video-media-item__body-container__title" v-html="title"></p>
         <p class="video-media-item__body-container__channel-name">{{ channelTitle }}</p>
         <p class="video-media-item__body-container__views">{{ Number(viewCount).toLocaleString() }} views</p>
       </div>
@@ -13,23 +13,42 @@
 </template>
 
 <script>
+
   export default {
     name: "VideoMediaItem",
     data: function () {
       return {
-        imgUrl: 'https://i.ytimg.com/vi/iyi_-0LpAds/mqdefault.jpg',
-        duration: '6:04',
-        title: 'Stargirl vs Shiv! Dragon King and Shiv’s Origin!  - Stargirl Episode 7 Review!',
-        channelTitle: 'Pagey',
-        viewCount: '4926714'
-        // Number(viewCount).toLocaleString()
+        id: '',
+        imgUrl: '',
+        duration: '',
+        title: '',
+        channelTitle: '',
+        viewCount: '',
+        channelId: ''
       }
+    },
+    props: {
+      item: Object,
     },
     methods: {
 
     },
     created() {
+      this.id = this.item.id.videoId;
+      this.channelId = this.item.snippet.channelId;
+      this.imgUrl = this.item.snippet.thumbnails.medium.url;
+      this.title = this.item.snippet.title;
+      this.channelTitle = this.item.snippet.channelTitle;
+      this.duration = this.item.statisticsInfo.contentDetails.duration.replace('PT', '')
       
+      if (this.duration.indexOf('M') === -1 && this.duration.indexOf('S') === -1) {
+        this.duration = this.duration + '00M00S'
+      } else if (this.duration.indexOf('S') === -1) {
+        this.duration = this.duration + '00S'
+      } 
+      this.duration = this.duration.replace('H', ':').replace('M', ':').replace('S', '');
+      
+      this.viewCount = this.item.statisticsInfo.stats.viewCount; 
     }
   };
 </script>
