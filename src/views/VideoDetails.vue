@@ -1,6 +1,6 @@
 <template>
   <div class="video-details-page">
-    <template v-if="loading">
+    <template v-if="false">
       <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
     </template>
     <template v-else>
@@ -24,7 +24,7 @@
           </span>
         </p>
       </div>
-      <div>
+      <div class="video-details-page__related-video-container">
         <template v-if="loading2">
           <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
         </template>
@@ -35,6 +35,7 @@
                 v-bind:key="index"
                 v-bind:item="item"
                 v-bind:statisticsInfo="videosResJson[item.id.videoId]"
+                v-bind:videoPageFlag="desktopFlag"
               />
             </template>
           </template>
@@ -63,21 +64,22 @@ export default {
       relatedVideos: [],
       videosResJson: {},
       loading: true,
-      loading2: true
+      loading2: true,
+      desktopFlag: false,
     };
   },
   methods: {
     async getData() {
       try {
         this.id = this.$route.params.id;
-        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`;
+        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
         else this.$router.push({ path: "/" });
         this.loading = false;
 
         let videoIds = [];
-        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`;
+        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
         res = await axios.get(relatedLink);
         this.relatedVideos = res.data.items;
         videoIds = this.relatedVideos
@@ -86,7 +88,7 @@ export default {
 
         const RealtedVideosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
           ","
-        )}&part=contentDetails,statistics&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`;
+        )}&part=contentDetails,statistics&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
         res = await axios.get(RealtedVideosLink);
         this.videosResJson = res.data.items.reduce((json, value) => {
           json[value.id] = {
@@ -102,6 +104,7 @@ export default {
     }
   },
   created() {
+    if (window.innerWidth >= 768) this.desktopFlag = true;
     this.getData();
     bus.$emit("resetHeaderTitle");
   },
@@ -115,21 +118,6 @@ export default {
 
 <style lang="scss" scoped>
 .video-details-page {
-  &__video-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    padding-top: 25px;
-    height: 0;
-
-    &__iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-  }
-
   &__video-info {
     padding: 10px 15px;
     margin-top: 15px;
@@ -152,18 +140,92 @@ export default {
     }
   }
 }
+@media (max-width: 767px) {
+  .video-details-page {
+    &__video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      padding-top: 25px;
+      height: 0;
 
-// @media (min-width: 768px) {
+      &__iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
 
-//   .video-details-page {
+    &__video-info {
+      padding: 10px 15px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
 
-//     &__video-container {
+      &__title {
+        font-size: 22px;
+        font-weight: bold;
+      }
 
-//       &__iframe {
+      &__sub-title {
+        font-size: 17px;
+        margin-top: 10px;
+        margin-bottom: 15px;
 
-//       }
-//     }
+        &__span {
+          color: #000000ad;
+        }
+      }
+    }
+  }
+}
 
-//   }
-// }
+@media (min-width: 768px) {
+
+  .video-details-page {
+    padding: 0px 15vw;
+    background-color: #f9f9f9;
+
+    &__video-container {
+      padding: 10px 10px;
+      background-color: white;
+
+      &__iframe {
+        width: 100%;
+        height: 37vw;
+      }
+
+    }
+
+    &__video-info {
+      padding: 25px 10px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      border-bottom: 1px solid #e0e0e0;
+      background-color: white;
+
+      &__title {
+        font-size: 25px;
+        font-weight: bold;
+      }
+
+      &__sub-title {
+        font-size: 18px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+
+        &__span {
+          color: #000000ad;
+        }
+      }
+    }
+
+    &__related-video-container {
+      padding: 0px 10px;
+      background-color: white;
+    }
+
+  }
+}
 </style>

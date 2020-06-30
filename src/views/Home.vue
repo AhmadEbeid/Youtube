@@ -103,7 +103,7 @@ export default {
       }
 
       const link = [
-        `https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`
       ];
 
       q ? link.push(`&q=${q}`) : "";
@@ -132,7 +132,7 @@ export default {
         if (videoIds.length) {
           const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
             ","
-          )}&part=contentDetails,statistics&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`;
+          )}&part=contentDetails,statistics&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
           const videosRes = await axios.get(videoLink);
           this.videosResJson = videosRes.data.items.reduce((json, value) => {
             json[value.id] = {
@@ -145,7 +145,7 @@ export default {
         if (playlistIds.length) {
           const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${playlistIds.join(
             ","
-          )}&part=contentDetails&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`;
+          )}&part=contentDetails&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
           const playlistsRes = await axios.get(playlistLink);
           this.playlistsResJson = playlistsRes.data.items.reduce(
             (json, value) => {
@@ -158,7 +158,7 @@ export default {
         if (channelIds.length) {
           const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${channelIds.join(
             ","
-          )}&part=statistics&key=AIzaSyClZz26tG9kIOsjNhy6VYUM_XF78qsmaZk`;
+          )}&part=statistics&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
           const channelsRes = await axios.get(channelLink);
           this.channelsResJson = channelsRes.data.items.reduce(
             (json, value) => {

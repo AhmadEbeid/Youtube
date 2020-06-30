@@ -1,34 +1,50 @@
 <template>
   <div
     v-if="loaded"
-    class="video-media-item"
+    v-bind:class="{'video-page-video-media-item': videoPageFlag, 'video-media-item': !videoPageFlag}"
     @click="$router.push({ name: 'Video', params: { id: item.id.videoId } })"
   >
-    <div class="video-media-item__image-container">
+    <div
+      v-bind:class="{'video-page-video-media-item__image-container': videoPageFlag, 'video-media-item__image-container': !videoPageFlag}"
+    >
       <img
-        class="video-media-item__image-container__img"
+        v-bind:class="{'video-page-video-media-item__image-container__img': videoPageFlag, 'video-media-item__image-container__img': !videoPageFlag}"
         v-bind:src="item.snippet.thumbnails.medium.url"
         alt
       />
       <span
         v-if="item.statisticsInfo"
-        class="video-media-item__image-container__span"
+        v-bind:class="{'video-page-video-media-item__image-container__span': videoPageFlag, 'video-media-item__image-container__span': !videoPageFlag}"
       >{{ getDuration(item.statisticsInfo.contentDetails.duration) }}</span>
     </div>
-    <div class="video-media-item__body-container">
-      <p class="video-media-item__body-container__title" v-html="item.snippet.title"></p>
-      <p class="video-media-item__body-container__channel-name">{{ item.snippet.channelTitle }}</p>
-      <span class="video-media-item__body-container__separator">•</span>
+    <div
+      v-bind:class="{'video-page-video-media-item__body-container': videoPageFlag, 'video-media-item__body-container': !videoPageFlag}"
+    >
+      <p
+        v-bind:class="{'video-page-video-media-item__body-container__title': videoPageFlag, 'video-media-item__body-container__title': !videoPageFlag}"
+        v-html="item.snippet.title"
+      ></p>
+      <p
+        v-bind:class="{'video-page-video-media-item__body-container__channel-name': videoPageFlag, 'video-media-item__body-container__channel-name': !videoPageFlag}"
+      >{{ item.snippet.channelTitle }}</p>
+      <span
+        v-bind:class="{'video-page-video-media-item__body-container__separator': videoPageFlag, 'video-media-item__body-container__separator': !videoPageFlag}"
+      >•</span>
       <p
         v-if="item.statisticsInfo"
-        class="video-media-item__body-container__views"
+        v-bind:class="{'video-page-video-media-item__body-container__views': videoPageFlag, 'video-media-item__body-container__views': !videoPageFlag}"
       >{{ Number(item.statisticsInfo.stats.viewCount).toLocaleString() }} views</p>
-      <span class="video-media-item__body-container__separator">•</span>
+      <span
+        v-bind:class="{'video-page-video-media-item__body-container__separator': videoPageFlag, 'video-media-item__body-container__separator': !videoPageFlag}"
+      >•</span>
       <p
         v-if="item.statisticsInfo"
-        class="video-media-item__body-container__how-old"
+        v-bind:class="{'video-page-video-media-item__body-container__how-old': videoPageFlag, 'video-media-item__body-container__how-old': !videoPageFlag}"
       >{{ getHowOld(item.snippet.publishTime) }}</p>
-      <p class="video-media-item__body-container__description" v-html="item.snippet.description"></p>
+      <p
+        v-bind:class="{'video-page-video-media-item__body-container__description': videoPageFlag, 'video-media-item__body-container__description': !videoPageFlag}"
+        v-html="item.snippet.description"
+      ></p>
     </div>
   </div>
 </template>
@@ -43,7 +59,8 @@ export default {
   },
   props: {
     item: Object,
-    statisticsInfo: Object
+    statisticsInfo: Object,
+    videoPageFlag: Boolean
   },
   methods: {
     getDuration(duration) {
@@ -217,6 +234,89 @@ export default {
         display: -webkit-box !important;
         font-size: 18px;
       }
+    }
+  }
+}
+
+.video-page-video-media-item {
+  padding: 10px 0px;
+  display: grid;
+  grid-template-columns: 160px auto;
+  grid-gap: 10px;
+  cursor: pointer;
+
+  &__image-container {
+    position: relative;
+
+    &__img {
+      width: 100%;
+    }
+
+    &__span {
+      margin: 5px;
+      padding: 1px 4px;
+      border-radius: 2px;
+      color: #eee;
+      background-color: hsla(0, 0%, 6.7%, 0.8);
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+    }
+  }
+
+  &__body-container {
+    &__title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      margin-bottom: 5px;
+    }
+
+    &__channel-name {
+      font-size: 15px;
+      color: #000000ad;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      margin-bottom: 5px;
+    }
+
+    &__separator {
+      display: none;
+    }
+
+    &__views {
+      font-size: 15px;
+      color: #000000ad;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+
+    &__how-old {
+      display: none !important;
+      color: #000000ad;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+    }
+
+    &__description {
+      display: none !important;
+      color: #000000ad;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
   }
 }
