@@ -1,5 +1,5 @@
 <template>
-    <div v-if="loaded" class="video-media-item">
+    <div v-if="loaded" class="video-media-item" @click="$router.push({ name: 'Video', params: { id: item.id.videoId } })">
       <div class="video-media-item__image-container">
         <img class="video-media-item__image-container__img" v-bind:src="item.snippet.thumbnails.medium.url" alt="">
         <span v-if="item.statisticsInfo" class="video-media-item__image-container__span">{{ getDuration(item.statisticsInfo.contentDetails.duration) }}</span>

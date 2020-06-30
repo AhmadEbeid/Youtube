@@ -111,4 +111,51 @@
     }
   }
 
+   // desktop
+  @media (min-width: 768px) { 
+
+    .playlist-media-item {
+      padding: 10px 10vw;
+      grid-template-columns: 310px auto;
+      grid-gap: 30px;
+
+      &__image-container {
+
+        &__div {
+          height: 174.38px;
+          width: 120px;
+
+          &__span {
+            font-size: 20px;
+          }
+
+          &__img {
+            width: 30px;
+            height: 30px;
+          }
+        }
+      }
+
+      &__body-container {
+
+        &__title {
+          margin-top: 5px;
+          font-size: 20px;
+        }
+
+        &__channel-name {
+          display: inline;
+          font-size: 16px;
+        }
+
+        &__description {
+          margin-top: 15px;
+          display: -webkit-box !important;
+          font-size: 18px;
+        }
+
+      }
+    }
+  }
+
 </style>

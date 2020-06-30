@@ -90,4 +90,41 @@
     }
   }
 
+  @media (min-width: 768px) { 
+
+    .channel-media-item {
+      padding: 10px 10vw;
+      grid-template-columns: 310px auto;
+      grid-gap: 30px;
+
+      &__img {
+        width: 136px;
+        height: 136px;
+        margin: auto;
+      }
+
+      &__body-container {
+
+        &__title {
+          font-size: 20px;
+        }
+
+        &__video-count {
+          display: none !important;
+        }
+
+        &__subscribers {
+          font-size: 16px;
+        }
+
+        &__description {
+          margin-top: 15px;
+          display: -webkit-box !important;
+          font-size: 18px;
+        }
+
+      }
+    }
+  }
+
 </style>
