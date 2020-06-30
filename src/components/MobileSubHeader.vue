@@ -31,7 +31,14 @@
     },
     methods: {
         typeSearch() {
-            this.$router.push({ query: Object.assign({}, this.$route.query, { type: this.type }) });
+            bus.$emit('searchBy');
+
+            if (this.type) {
+                this.$router.push({ query: Object.assign({}, this.$route.query, { type: this.type }) });
+            } else {
+                this.$router.push({ query: Object.assign({}, this.$route.query, { type: null }) });
+            }
+            
             bus.$emit('searchBy');
         },
         publishDateCalculate() {
@@ -54,7 +61,13 @@
         },
         publishedAfterSearch() {
             this.publishDateCalculate();
-            this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: this.publishedAfter, time: this.time }) });
+
+            if (this.publishedAfter) {
+                this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: this.publishedAfter, time: this.time }) });
+            } else {
+                this.$router.push({ query: Object.assign({}, this.$route.query, { publishedAfter: null, time: null }) });
+            }
+            
             bus.$emit('searchBy');
         }
     },

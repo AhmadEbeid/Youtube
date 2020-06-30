@@ -1,51 +1,57 @@
 <template>
-    <div class="video-media-item">
+    <div v-if="loaded" class="video-media-item">
       <div class="video-media-item__image-container">
-        <img class="video-media-item__image-container__img" v-bind:src="imgUrl" alt="">
-        <span class="video-media-item__image-container__span">{{ duration }}</span>
+        <img class="video-media-item__image-container__img" v-bind:src="item.snippet.thumbnails.medium.url" alt="">
+        <span v-if="item.statisticsInfo" class="video-media-item__image-container__span">{{ getDuration(item.statisticsInfo.contentDetails.duration) }}</span>
       </div>
       <div class="video-media-item__body-container">
-        <p class="video-media-item__body-container__title" v-html="title"></p>
-        <p class="video-media-item__body-container__channel-name">{{ channelTitle }}</p>
-        <p class="video-media-item__body-container__views">{{ Number(viewCount).toLocaleString() }} views</p>
+        <p class="video-media-item__body-container__title" v-html="item.snippet.title"></p>
+        <p class="video-media-item__body-container__channel-name">{{ item.snippet.channelTitle }}</p>
+        <p v-if="item.statisticsInfo" class="video-media-item__body-container__views">{{ Number(item.statisticsInfo.stats.viewCount).toLocaleString() }} views</p>
       </div>
     </div>
 </template>
 
 <script>
 
+  import axios from "axios";
+
   export default {
     name: "VideoMediaItem",
     data: function () {
       return {
-        id: '',
-        imgUrl: '',
-        duration: '',
-        title: '',
-        channelTitle: '',
-        viewCount: '',
-        channelId: ''
+        loaded: false,
       }
     },
     props: {
       item: Object,
     },
+    methods: {
+      getDuration(duration) {
+        duration = duration.replace('PT', '')
+        
+        if (duration.indexOf('M') === -1 && duration.indexOf('S') === -1) {
+          duration = duration + '00M00S'
+        } else if (duration.indexOf('S') === -1) {
+          duration = duration + '00S'
+        } 
+        return duration.replace('H', ':').replace('M', ':').replace('S', '');
+      }
+    },
     created() {
-      this.id = this.item.id.videoId;
-      this.channelId = this.item.snippet.channelId;
-      this.imgUrl = this.item.snippet.thumbnails.medium.url;
-      this.title = this.item.snippet.title;
-      this.channelTitle = this.item.snippet.channelTitle;
-      this.duration = this.item.statisticsInfo.contentDetails.duration.replace('PT', '')
-      
-      if (this.duration.indexOf('M') === -1 && this.duration.indexOf('S') === -1) {
-        this.duration = this.duration + '00M00S'
-      } else if (this.duration.indexOf('S') === -1) {
-        this.duration = this.duration + '00S'
-      } 
-      this.duration = this.duration.replace('H', ':').replace('M', ':').replace('S', '');
-      
-      this.viewCount = this.item.statisticsInfo.stats.viewCount; 
+      if (!this.item.statisticsInfo) {
+        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.item.id.videoId}&part=contentDetails,statistics&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`
+        axios.get(videoLink)
+        .then(res => {
+          res.data.items.forEach(item => {
+            this.item.statisticsInfo = { stats: item.statistics, contentDetails: item.contentDetails }
+            this.loaded = true;
+          })
+        })
+        .catch(err => console.log(err));
+      } else {
+        this.loaded = true;
+      }
     }
   };
 </script>

@@ -1,40 +1,47 @@
 <template>
-    <div class="playlist-media-item">
+    <div v-if="loaded" class="playlist-media-item">
       <div class="playlist-media-item__image-container">
-        <img class="playlist-media-item__image-container__img" v-bind:src="imgUrl" alt="">
-        <div class="playlist-media-item__image-container__div">
-          <span class="playlist-media-item__image-container__div__span">{{ itemCount }}</span>
+        <img class="playlist-media-item__image-container__img" v-bind:src="item.snippet.thumbnails.medium.url" alt="">
+        <div v-if="item.contentDetails" class="playlist-media-item__image-container__div">
+          <span class="playlist-media-item__image-container__div__span">{{ item.contentDetails.itemCount }}</span>
           <img class="playlist-media-item__image-container__div__img" src="../../assets/playlist-count.svg" alt="count">
         </div>
       </div>
       <div class="playlist-media-item__body-container">
-        <p class="playlist-media-item__body-container__title" v-html="title"></p>
-        <p class="playlist-media-item__body-container__channel-name">{{ channelTitle }}</p>
+        <p class="playlist-media-item__body-container__title" v-html="item.snippet.title"></p>
+        <p class="playlist-media-item__body-container__channel-name">{{ item.snippet.channelTitle }}</p>
       </div>
     </div>
 </template>
 
 <script>
+
+  import axios from "axios";
+
   export default {
     name: "PlaylistMediaItem",
     data: function () {
       return {
-        id: '',
-        imgUrl: '',
-        itemCount: '',
-        title: '',
-        channelTitle: '',
+        loaded: false,
       }
     },
     props: {
       item: Object,
     },
     created() {
-      this.id = this.item.id.videoId;
-      this.imgUrl = this.item.snippet.thumbnails.medium.url;
-      this.title = this.item.snippet.title;
-      this.channelTitle = this.item.snippet.channelTitle;
-      this.itemCount = this.item.contentDetails.itemCount
+      if (!this.item.contentDetails) {
+        const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${this.item.id.playlistId}&part=contentDetails&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`
+        axios.get(playlistLink)
+        .then(res => {
+          res.data.items.forEach(item => {
+            this.item.contentDetails = item.contentDetails;
+            this.loaded = true;
+          })
+        })
+        .catch(err => console.log(err));
+      } else {
+        this.loaded = true;
+      }
     }
   };
 </script>

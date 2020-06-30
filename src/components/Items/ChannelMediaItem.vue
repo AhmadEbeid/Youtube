@@ -1,36 +1,42 @@
 <template>
-    <div class="channel-media-item">
-      <img class="channel-media-item__img" v-bind:src="imgUrl" alt="">
+    <div v-if="loaded" class="channel-media-item">
+      <img class="channel-media-item__img" v-bind:src="item.snippet.thumbnails.medium.url" alt="">
       <div class="channel-media-item__body-container">
-        <p class="channel-media-item__body-container__title" v-html="title"></p>
-        <p class="channel-media-item__body-container__video-count">{{ Number(videoCount).toLocaleString() }} videos</p>
-        <p class="channel-media-item__body-container__subscribers">{{ Number(subscriberCount).toLocaleString() }} subscribers</p>
+        <p class="channel-media-item__body-container__title" v-html="item.snippet.title"></p>
+        <p v-if="item.statistics" class="channel-media-item__body-container__video-count">{{ Number(item.statistics.videoCount).toLocaleString() }} videos</p>
+        <p v-if="item.statistics" class="channel-media-item__body-container__subscribers">{{ Number(item.statistics.subscriberCount).toLocaleString() }} subscribers</p>
       </div>
     </div>
 </template>
 
 <script>
+
+  import axios from "axios";
+
   export default {
     name: "ChannelMediaItem",
     data: function () {
       return {
-        id: '',
-        imgUrl: '',
-        title: '',
-        videoCount: '',
-        subscriberCount: '',
+        loaded: false,
       }
     },
     props: {
       item: Object,
     },
     created() {
-      this.id = this.item.id.videoId;
-      this.imgUrl = this.item.snippet.thumbnails.medium.url;
-      this.title = this.item.snippet.title;
-      this.channelTitle = this.item.snippet.channelTitle;
-      this.videoCount = this.item.statistics.videoCount
-      this.subscriberCount = this.item.statistics.subscriberCount
+      if (!this.item.statistics) {
+        const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${this.item.id.channelId}&part=statistics&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`
+        axios.get(channelLink)
+        .then(res => {
+          res.data.items.forEach(item => {
+            this.item.statistics = item.statistics;
+            this.loaded = true;
+          })
+        })
+        .catch(err => console.log(err));
+      } else {
+        this.loaded = true;
+      }
     }
   };
 </script>

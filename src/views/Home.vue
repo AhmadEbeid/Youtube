@@ -1,16 +1,29 @@
 <template>
   <div class="home">
-    <MobileSubHeader  />
-    <template v-for="item in mediaItems">
-      <template v-if="item.id.kind === 'youtube#video'">
-        <VideoMediaItem v-bind:key="item.id.videoId" v-bind:item="item"/>
+    <template v-if="loading">
+      <MobileLoader v-bind:viewText="true"></MobileLoader>
+    </template>
+    <template v-else>
+      <MobileSubHeader  />
+      <template v-for="(item, index) in mediaItems">
+        <template v-if="item.id.kind === 'youtube#video'">
+          <VideoMediaItem v-bind:key="index" v-bind:item="item"/>
+        </template>
+        <template v-if="item.id.kind === 'youtube#playlist'">
+          <PlaylistMediaItem v-bind:key="index" v-bind:item="item"/>
+        </template>
+        <template v-if="item.id.kind === 'youtube#channel'">
+          <ChannelMediaItem v-bind:key="index" v-bind:item="item"/>
+        </template>
       </template>
-      <template v-if="item.id.kind === 'youtube#playlist'">
-        <PlaylistMediaItem v-bind:key="item.id.playlistId" v-bind:item="item"/>
+      <template v-if="moreLoading">
+        <MobileLoader v-bind:viewText="false"></MobileLoader>
       </template>
-      <template v-if="item.id.kind === 'youtube#channel'">
-        <ChannelMediaItem v-bind:key="item.id.channelId" v-bind:item="item"/>
-      </template>
+      <template v-else>
+        <div v-if="nextPageToken" @click="showMore" class="load-more">
+          Show more items
+        </div>  
+      </template>      
     </template>
   </div>
 </template>
@@ -20,6 +33,7 @@ import MobileSubHeader from "@/components/MobileSubHeader.vue";
 import VideoMediaItem from "@/components/Items/VideoMediaItem.vue";
 import ChannelMediaItem from "@/components/Items/ChannelMediaItem.vue";
 import PlaylistMediaItem from "@/components/Items/PlaylistMediaItem.vue";
+import MobileLoader from "@/components/MobileLoader.vue";
 
 import axios from "axios";
 import { bus } from '../main';
@@ -31,18 +45,27 @@ export default {
     VideoMediaItem,
     ChannelMediaItem,
     PlaylistMediaItem,
+    MobileLoader,
   },
   data: function () {
     return {
-      items: [],
       mediaItems: [],
+      items: [],
+      loading: true,
+      moreLoading: false,
       nextPageToken: '',
       totalResults: -1,
+      bottomOfWindowFlag: false,
     }
   },
   methods: {
-    async getData({q, type, publishedAfter, order, pageToken}) {
-      const link = [`https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`];
+    getData({q, type, publishedAfter, order, pageToken, prevList = []}) {
+      this.items = [];
+
+      if (!prevList.length) this.loading = true;
+      else this.moreLoading = true;
+      
+      const link = [`https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyCgICO5PzjrLa9s5hs9sMG1rg5fRDRSNxE`];
 
       q ? link.push(`&q=${q}`) : '';
       type ? link.push(`&type=${type}`) : '';
@@ -50,67 +73,51 @@ export default {
       order ? link.push(`&order=${order}`) : '';
       pageToken ? link.push(`&pageToken=${pageToken}`) : '';
 
-      const videosIDs = [];
-      const videosIDsData = {};
-      const playlistsIDs = [];
-      const playlistsIDsData = {};
-      const channelsIDs = [];
-      const channelsIDsData = {};
+      console.log(link.join(''));
 
-      await axios.get(link.join(''))
+      axios.get(link.join(''))
       .then(res => {
         this.items = res.data.items;
-        this.items.forEach((item) => {
-          item.id.kind === 'youtube#video' ? videosIDs.push(item.id.videoId): '';
-          item.id.kind === 'youtube#playlist' ? playlistsIDs.push(item.id.playlistId): ''; 
-          item.id.kind === 'youtube#channel' ? channelsIDs.push(item.id.channelId): ''; 
-        })
         this.nextPageToken = res.data.nextPageToken;
         this.totalResults = res.data.pageInfo.totalResults;
+        this.mediaItems = [...prevList, ...this.items];
+        this.loading = false;
+        this.moreLoading = false;
       })
       .catch(err => console.log(err));
 
-      if (videosIDs.join(',')) {
-        const videosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videosIDs.join(',')}&part=contentDetails,statistics&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
-        await axios.get(videosLink)
-        .then(res => {
-          res.data.items.forEach(item => {
-            videosIDsData[item.id] = { stats: item.statistics, contentDetails: item.contentDetails };
-          })
-        })
-        .catch(err => console.log(err));
+    },
+    showMore() {
+      const searchDetails = {
+        q: this.$route.query.q,
+        type: this.$route.query.type,
+        publishedAfter: this.$route.query.publishedAfter,
+        order: this.$route.query.order,
+        pageToken: this.nextPageToken,
+        prevList: JSON.parse(JSON.stringify(this.mediaItems))
       }
+      this.getData(searchDetails);
+    },
+    scroll () {
+      window.onscroll = () => {
+        let bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, 
+        document.body.scrollTop) + window.innerHeight === document.documentElement.offsetHeight
 
-      if (playlistsIDs.join(',')) {
-        const playlistsLink = `https://www.googleapis.com/youtube/v3/playlists?id=${playlistsIDs.join(',')}&part=contentDetails&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
-        await axios.get(playlistsLink)
-        .then(res => {
-          res.data.items.forEach(item => {
-            playlistsIDsData[item.id] = item.contentDetails;
-          })
-        })
-        .catch(err => console.log(err));
+        if (bottomOfWindow && !this.bottomOfWindowFlag) {
+          console.log(bottomOfWindow)
+          console.log(Math.max(window.pageYOffset, document.documentElement.scrollTop, 
+        document.body.scrollTop) + window.innerHeight)
+          console.log(document.documentElement.offsetHeight)
+        } else {
+          setTimeout(() => {
+            this.bottomOfWindowFlag = false;
+          }, 100);
+        }
       }
-
-      if (channelsIDs.join(',')) {
-        const channelsLink = `https://www.googleapis.com/youtube/v3/channels?id=${channelsIDs.join(',')}&part=statistics&key=AIzaSyBvkzUEPtvoBh87dVLjNaHQ9E4ITcOj8Sw`
-        await axios.get(channelsLink)
-        .then(res => {
-          res.data.items.forEach(item => {
-            channelsIDsData[item.id] = item.statistics;
-          })
-        })
-        .catch(err => console.log(err));
-      }
-
-      this.items.forEach((item) => {
-        item.id.kind === 'youtube#video' ? item['statisticsInfo'] = videosIDsData[item.id.videoId]: '';
-        item.id.kind === 'youtube#playlist' ? item['contentDetails'] = playlistsIDsData[item.id.playlistId]: ''; 
-        item.id.kind === 'youtube#channel' ? item['statistics'] = channelsIDsData[item.id.channelId]: ''; 
-      })
-
-      this.mediaItems = this.items;
     }
+  },
+  mounted () {
+    this.scroll()
   },
   created() {
     const searchDetails = {
@@ -133,3 +140,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .load-more {
+    border-top: 1px solid;
+    margin-top: 15px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+  }
+</style>
