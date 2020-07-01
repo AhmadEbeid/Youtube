@@ -57,7 +57,7 @@ import DesktopLoader from "@/components/desktop/DesktopLoader.vue";
 import PlaylistMediaItem from "@/components/common/PlaylistMediaItem.vue";
 
 export default {
-  name: "VideoDetails",
+  name: "ChannelDetails",
   components: {
     MobileLoader,
     DesktopLoader,
