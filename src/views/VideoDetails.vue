@@ -1,52 +1,55 @@
 <template>
-  <div class="video-details-page">
-    <template v-if="loading">
-      <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
-    </template>
-    <template v-else>
-      <div class="video-details-page__video-container">
-        <iframe
-          class="video-details-page__video-container__iframe"
-          v-bind:src="'https://www.youtube.com/embed/' + id"
-        ></iframe>
-      </div>
-      <div class="video-details-page__video-info">
-        <h1 class="video-details-page__video-info__title">{{ videoData.snippet.title }}</h1>
-        <p class="video-details-page__video-info__sub-title">
-          <span class="video-details-page__video-info__sub-title__span">
-            <span v-if="!desktopFlag">{{ this.videoData.snippet.channelTitle }}</span>
-            {{
-            Number(videoData.statistics.viewCount).toLocaleString()
-            }}
-            views
-          </span>
-        </p>
-      </div>
-      <div class="video-details-page__video-sub-info">
-        <img class="video-details-page__video-sub-info__img" v-bind:src="videoData.snippet.thumbnails.default.url" alt />
-        <div>
-          <p class="video-details-page__video-sub-info__title">{{videoData.snippet.channelTitle}}</p>
-          <p class="video-details-page__video-sub-info__info">Published on {{publishedAt(videoData.snippet.publishedAt)}}</p>
+  <div>
+    <DesktopLoader class="mobile-hidden" v-bind:loading="desktopLoader" v-bind:width="loaderWidth"></DesktopLoader>
+    <div class="video-details-page">
+      <template v-if="loading">
+        <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
+      </template>
+      <template v-else>
+        <div class="video-details-page__video-container">
+          <iframe
+            class="video-details-page__video-container__iframe"
+            v-bind:src="'https://www.youtube.com/embed/' + id"
+          ></iframe>
         </div>
-      </div>
-      <div class="video-details-page__related-video-container">
-        <template v-if="loading2">
-          <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
-        </template>
-        <template v-else>
-          <template v-for="(item, index) in relatedVideos">
-            <template v-if="item.id.kind === 'youtube#video'">
-              <VideoMediaItem
-                v-bind:key="index"
-                v-bind:item="item"
-                v-bind:statisticsInfo="videosResJson[item.id.videoId]"
-                v-bind:videoPageFlag="desktopFlag"
-              />
+        <div class="video-details-page__video-info">
+          <h1 class="video-details-page__video-info__title">{{ videoData.snippet.title }}</h1>
+          <p class="video-details-page__video-info__sub-title">
+            <span class="video-details-page__video-info__sub-title__span">
+              <span v-if="!desktopFlag">{{ this.videoData.snippet.channelTitle }}</span>
+              {{
+              Number(videoData.statistics.viewCount).toLocaleString()
+              }}
+              views
+            </span>
+          </p>
+        </div>
+        <div class="video-details-page__video-sub-info">
+          <img class="video-details-page__video-sub-info__img" v-bind:src="videoData.snippet.thumbnails.default.url" alt />
+          <div>
+            <p class="video-details-page__video-sub-info__title">{{videoData.snippet.channelTitle}}</p>
+            <p class="video-details-page__video-sub-info__info">Published on {{publishedAt(videoData.snippet.publishedAt)}}</p>
+          </div>
+        </div>
+        <div class="video-details-page__related-video-container">
+          <template v-if="loading2">
+            <MobileLoader v-bind:viewText="true"></MobileLoader>
+          </template>
+          <template v-else>
+            <template v-for="(item, index) in relatedVideos">
+              <template v-if="item.id.kind === 'youtube#video'">
+                <VideoMediaItem
+                  v-bind:key="index"
+                  v-bind:item="item"
+                  v-bind:statisticsInfo="videosResJson[item.id.videoId]"
+                  v-bind:videoPageFlag="desktopFlag"
+                />
+              </template>
             </template>
           </template>
-        </template>
-      </div>
-    </template>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -54,12 +57,14 @@
 import axios from "axios";
 import { bus } from "../main";
 import MobileLoader from "@/components/mobile/MobileLoader.vue";
+import DesktopLoader from "@/components/desktop/DesktopLoader.vue";
 import VideoMediaItem from "@/components/common/VideoMediaItem.vue";
 
 export default {
   name: "VideoDetails",
   components: {
     MobileLoader,
+    DesktopLoader,
     VideoMediaItem
   },
   data: function() {
@@ -70,21 +75,45 @@ export default {
       videosResJson: {},
       loading: true,
       loading2: true,
-      desktopFlag: false
+      desktopFlag: false,
+      loaderWidth: 0,
+      desktopLoader: true,
+      loaderInterval: null,
     };
   },
   methods: {
     async getData() {
       try {
+        this.loading = true;
+        this.desktopLoader = true;
+        this.loaderWidth = 0;
+        let loaderRest = false;
+        this.loaderInterval = setInterval(() => {
+          if (!loaderRest) this.loaderWidth++;
+          if (this.loaderWidth === 100) {
+            loaderRest = true;
+            setTimeout(() => {
+              this.desktopLoader = false;
+              this.loaderWidth = 0;
+              setTimeout(() => {
+                this.desktopLoader = true;
+                loaderRest = false;
+              }, 100);
+            }, 800);
+          }
+        }, 100);
         this.id = this.$route.params.id;
-        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
+        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
         else this.$router.push({ path: "/" });
         this.loading = false;
+        this.loaderWidth = 100;
+        this.desktopLoader = false;
+        clearInterval(this.loaderInterval);
 
         let videoIds = [];
-        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
+        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
         res = await axios.get(relatedLink);
         this.relatedVideos = res.data.items;
         videoIds = this.relatedVideos
@@ -93,7 +122,7 @@ export default {
 
         const RealtedVideosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
           ","
-        )}&part=contentDetails,statistics&key=AIzaSyAXyLUOCRRAWZuvwrcoqh0EvNScFYieDEQ`;
+        )}&part=contentDetails,statistics&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
         res = await axios.get(RealtedVideosLink);
         this.videosResJson = res.data.items.reduce((json, value) => {
           json[value.id] = {
@@ -247,6 +276,7 @@ export default {
     }
 
     &__related-video-container {
+      min-height: 200px;
       padding: 0px 10px;
       background-color: white;
     }

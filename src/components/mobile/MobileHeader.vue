@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <img
-      @click="$router.push({ name: 'Home' })"
+      @click="goHome"
       class="header__logo"
       src="../../assets/logo-youtube.svg"
       alt="logo"
@@ -39,6 +39,10 @@ export default {
     };
   },
   methods: {
+    goHome() {
+      this.$router.push({ name: 'Home' });
+      bus.$emit('searchBy', { q: '', type: '', publishedAfter: '', order: 'relevance' });
+    },
     showSearch() {
       this.searchInput = this.searchInput.trim();
       if (this.searchFlag && this.searchInput) {
@@ -62,7 +66,7 @@ export default {
         this.$router.push({
           query: Object.assign({}, this.$route.query, { q: this.searchInput })
         });
-        bus.$emit("searchBy", { q: this.searchInput });
+        bus.$emit('searchBy', { q: this.searchInput });
 
         this.title = this.searchInput;
       }
@@ -95,6 +99,7 @@ export default {
     height: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
   }
 
   &__title {

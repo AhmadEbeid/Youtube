@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header__body">
       <img
-        @click="$router.push({ name: 'Home' })"
+        @click="goHome"
         class="header__body__logo"
         src="../../assets/logo-youtube-desktop.svg"
         alt="logo"
@@ -40,13 +40,17 @@ export default {
     };
   },
   methods: {
+    goHome() {
+      this.$router.push({ name: 'Home' });
+      bus.$emit('searchBy', { q: '', type: '', publishedAfter: '', order: 'relevance' });
+    },
     search() {
       this.$router.push({ name: "Home" });
       if (this.$route.query.q !== this.searchInput) {
         this.$router.push({
           query: Object.assign({}, this.$route.query, { q: this.searchInput })
         });
-        bus.$emit("searchBy", { q: this.searchInput });
+        bus.$emit('searchBy', { q: this.searchInput });
 
         this.title = this.searchInput;
       }
@@ -72,12 +76,14 @@ export default {
     display: flex;
     align-content: center;
     top: 0;
+    box-shadow: 0 4px 2px -2px darkgrey;
 
     &__logo {
       height: 30px;
       margin-top: 10px;
       margin-bottom: 10px;
       margin-right: auto;
+      cursor: pointer;
     }
 
     &__search_input {

@@ -38,7 +38,7 @@ export default {
       this.$router.push({
         query: Object.assign({}, this.$route.query, { type: this.type })
       });
-      bus.$emit("searchBy", { type: this.type });
+      bus.$emit('searchBy', { type: this.type });
     },
     publishDateCalculate() {
       const date = new Date();
@@ -66,7 +66,7 @@ export default {
           time: this.time
         })
       });
-      bus.$emit("searchBy", {
+      bus.$emit('searchBy', {
         publishedAfter: this.publishedAfter,
         time: this.time
       });
