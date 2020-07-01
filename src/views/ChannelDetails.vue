@@ -35,12 +35,12 @@
           </template>
           <template v-else>
             <template v-for="(item, index) in relatedPlaylists">
-               <PlaylistMediaItem
-                  v-bind:key="index"
-                  v-bind:item="item"
-                  v-bind:contentDetails="item.contentDetails"
-                  v-bind:channelPageFlag="desktopFlag"
-                />
+              <PlaylistMediaItem
+                v-bind:key="index"
+                v-bind:item="item"
+                v-bind:contentDetails="item.contentDetails"
+                v-bind:channelPageFlag="desktopFlag"
+              />
             </template>
           </template>
         </div>
@@ -117,12 +117,12 @@ export default {
 
         const playlistsLink = `https://www.googleapis.com/youtube/v3/playlists?maxResults=50&part=contentDetails,snippet,id&channelId=${this.id}&key=${process.env.VUE_APP_API_KEY}`;
         res = await axios.get(playlistsLink);
-        this.relatedPlaylists = res.data.items.map((item) => {
-          const id = item.id
+        this.relatedPlaylists = res.data.items.map(item => {
+          const id = item.id;
           item.id = {};
-          item.id['playlistId'] = id;
+          item.id["playlistId"] = id;
           return item;
-        })
+        });
 
         this.loading2 = false;
       } catch (error) {
