@@ -1,5 +1,9 @@
 <template>
-  <div v-if="loaded" class="channel-media-item">
+  <div
+    v-if="loaded"
+    class="channel-media-item"
+    @click="$router.push({ name: 'Channel', params: { id: item.id.channelId } })"
+  >
     <img class="channel-media-item__img" v-bind:src="item.snippet.thumbnails.medium.url" alt />
     <div class="channel-media-item__body-container">
       <p class="channel-media-item__body-container__title" v-html="item.snippet.title"></p>

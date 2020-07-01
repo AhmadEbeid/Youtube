@@ -3,20 +3,17 @@
     <DesktopLoader class="mobile-hidden" v-bind:loading="desktopLoader" v-bind:width="loaderWidth"></DesktopLoader>
     <div class="video-details-page">
       <template v-if="loading">
-        <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
+        <MobileLoader class="desktop-hidden" v-bind:viewText="true" />
       </template>
       <template v-else>
         <div class="video-details-page__video-container">
-          <iframe
-            class="video-details-page__video-container__iframe"
-            v-bind:src="videoLink"
-          ></iframe>
+          <iframe class="video-details-page__video-container__iframe" v-bind:src="videoLink"></iframe>
         </div>
         <div class="video-details-page__video-info">
           <h1 class="video-details-page__video-info__title">{{ videoData.snippet.title }}</h1>
           <p v-if="videoFLag" class="video-details-page__video-info__sub-title">
             <span class="video-details-page__video-info__sub-title__span">
-              <span v-if="!desktopFlag">{{ this.videoData.snippet.channelTitle }}</span>
+              <span v-if="!desktopFlag">{{ videoData.snippet.channelTitle }}</span>
               {{
               Number(videoData.statistics.viewCount).toLocaleString()
               }}
@@ -39,16 +36,16 @@
         </div>
         <div class="video-details-page__related-video-container">
           <template v-if="loading2">
-            <MobileLoader v-bind:viewText="true"></MobileLoader>
+            <MobileLoader v-bind:marginFLag="true" v-bind:viewText="true" />
           </template>
           <template v-else>
             <template v-for="(item, index) in relatedVideos">
-                <VideoMediaItem
-                  v-bind:key="index"
-                  v-bind:item="item"
-                  v-bind:statisticsInfo="videosResJson[item.id.videoId]"
-                  v-bind:videoPageFlag="desktopFlag"
-                />
+              <VideoMediaItem
+                v-bind:key="index"
+                v-bind:item="item"
+                v-bind:statisticsInfo="videosResJson[item.id.videoId]"
+                v-bind:videoPageFlag="desktopFlag"
+              />
             </template>
           </template>
         </div>
@@ -84,7 +81,7 @@ export default {
       loaderWidth: 0,
       desktopLoader: true,
       loaderInterval: null,
-      videoFLag: true,
+      videoFLag: true
     };
   },
   methods: {
@@ -182,7 +179,7 @@ export default {
         res = await axios.get(relatedLink);
         this.relatedVideos = res.data.items;
         this.relatedVideos = this.relatedVideos.map(item => {
-          item.id = item.snippet.resourceId
+          item.id = item.snippet.resourceId;
           return item;
         });
         videoIds = this.relatedVideos.map(item => item.id.videoId);
@@ -217,7 +214,7 @@ export default {
     if (this.$route.name === "Playlist") {
       this.getPlaylistData();
       this.videoFLag = false;
-    };
+    }
   },
   watch: {
     $route() {
@@ -266,13 +263,6 @@ export default {
         width: 100%;
         height: 100%;
       }
-    }
-
-    &__video-info {
-      padding: 10px 15px;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #e0e0e0;
     }
 
     &__video-sub-info {

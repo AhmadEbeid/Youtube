@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="{'loading-container': viewText, 'loading-container-no-text': !viewText}">
+  <div v-bind:class="{'loading-container': viewText, 'loading-container-no-text': !viewText, 'margin-top': !marginFLag, 'padding-top': marginFLag }">
     <img
       v-bind:class="{'loading-container__img': viewText, 'loading-container-no-text__img': !viewText}"
       src="../../assets/loader.svg"
@@ -13,15 +13,23 @@
 export default {
   name: "MobileLoader",
   props: {
-    viewText: Boolean
+    viewText: Boolean,
+    marginFLag: Boolean
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.margin-top {
+  margin-top: 20vh;
+}
+
+.padding-top {
+  padding-top: 20vh;
+}
+
 .loading-container {
   text-align: center;
-  margin-top: 20vh;
 
   &__img {
     width: 20px;

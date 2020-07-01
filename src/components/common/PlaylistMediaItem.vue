@@ -1,7 +1,10 @@
 <template>
-  <div v-if="loaded && item.snippet.thumbnails" 
-  class="playlist-media-item"
-  @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } })">
+  <div
+    v-if="loaded && item.snippet.thumbnails"
+    class="playlist-media-item"
+    v-bind:class="{ 'playlist-media-item-padding-channel-page': channelPageFlag }"
+    @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } })"
+  >
     <div class="playlist-media-item__image-container">
       <img
         class="playlist-media-item__image-container__img"
@@ -37,7 +40,8 @@ export default {
   },
   props: {
     item: Object,
-    contentDetails: Object
+    contentDetails: Object,
+    channelPageFlag: Boolean
   },
   created() {
     this.item.contentDetails = this.contentDetails;
@@ -58,7 +62,8 @@ export default {
     position: relative;
 
     &__img {
-      width: 100%;
+      width: 160px;
+      height: 90px;
     }
 
     &__div {
@@ -121,12 +126,21 @@ export default {
 
 // desktop
 @media (min-width: 768px) {
+  .playlist-media-item-padding-channel-page {
+    padding: 10px 0vw !important;
+  }
+
   .playlist-media-item {
     padding: 10px 15vw;
     grid-template-columns: 310px auto;
     grid-gap: 30px;
 
     &__image-container {
+      &__img {
+        width: 310px;
+        height: 174.38px;
+      }
+
       &__div {
         height: 174.38px;
         width: 120px;
