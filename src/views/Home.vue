@@ -6,7 +6,7 @@
         v-bind:loading="desktopLoader"
         v-bind:width="loaderWidth"
       ></DesktopLoader>
-      <MobileLoader class="desktop-hidden" v-bind:viewText="true"/>
+      <MobileLoader class="desktop-hidden" v-bind:viewText="true" />
     </template>
     <template v-else>
       <MobileSubHeader class="desktop-hidden" />
@@ -46,7 +46,7 @@
           v-bind:loading="desktopLoader"
           v-bind:width="loaderWidth"
         ></DesktopLoader>
-        <MobileLoader v-bind:viewText="false"/>
+        <MobileLoader v-bind:viewText="false" />
       </template>
       <template v-else>
         <div

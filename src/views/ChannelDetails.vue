@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DesktopLoader class="mobile-hidden" v-bind:loading="desktopLoader" v-bind:width="loaderWidth"></DesktopLoader>
+    <DesktopLoader class="mobile-hidden" v-bind:loading="desktopLoader" v-bind:width="loaderWidth" />
     <div class="channel-details-page">
       <template v-if="loading">
         <MobileLoader class="desktop-hidden" v-bind:viewText="true" />
