@@ -41,8 +41,13 @@ export default {
   },
   methods: {
     goHome() {
-      this.$router.push({ name: 'Home' });
-      bus.$emit('searchBy', { q: '', type: '', publishedAfter: '', order: 'relevance' });
+      this.$router.push({ name: "Home" });
+      bus.$emit("searchBy", {
+        q: "",
+        type: "",
+        publishedAfter: "",
+        order: "relevance"
+      });
     },
     search() {
       this.$router.push({ name: "Home" });
@@ -50,7 +55,7 @@ export default {
         this.$router.push({
           query: Object.assign({}, this.$route.query, { q: this.searchInput })
         });
-        bus.$emit('searchBy', { q: this.searchInput });
+        bus.$emit("searchBy", { q: this.searchInput });
 
         this.title = this.searchInput;
       }

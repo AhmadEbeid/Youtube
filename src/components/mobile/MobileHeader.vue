@@ -1,11 +1,6 @@
 <template>
   <header class="header">
-    <img
-      @click="goHome"
-      class="header__logo"
-      src="../../assets/logo-youtube.svg"
-      alt="logo"
-    />
+    <img @click="goHome" class="header__logo" src="../../assets/logo-youtube.svg" alt="logo" />
     <input
       ref="search"
       v-if="searchFlag"
@@ -40,8 +35,13 @@ export default {
   },
   methods: {
     goHome() {
-      this.$router.push({ name: 'Home' });
-      bus.$emit('searchBy', { q: '', type: '', publishedAfter: '', order: 'relevance' });
+      this.$router.push({ name: "Home" });
+      bus.$emit("searchBy", {
+        q: "",
+        type: "",
+        publishedAfter: "",
+        order: "relevance"
+      });
     },
     showSearch() {
       this.searchInput = this.searchInput.trim();
@@ -66,7 +66,7 @@ export default {
         this.$router.push({
           query: Object.assign({}, this.$route.query, { q: this.searchInput })
         });
-        bus.$emit('searchBy', { q: this.searchInput });
+        bus.$emit("searchBy", { q: this.searchInput });
 
         this.title = this.searchInput;
       }

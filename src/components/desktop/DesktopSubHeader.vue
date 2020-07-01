@@ -5,7 +5,11 @@
         <p>About 13,0000 Results</p>
       </div>
       <div @click="filter = !filter" class="sub-header__filter-header__filter">
-        <img class="sub-header__filter-header__filter__img" src="../../assets/filter-icon.png" alt="filter">
+        <img
+          class="sub-header__filter-header__filter__img"
+          src="../../assets/filter-icon.png"
+          alt="filter"
+        />
         <div class="sub-header__filter-header__filter__text">
           <p>Filter</p>
         </div>
@@ -15,19 +19,31 @@
       <div class="sub-header__filter-body__filter-options">
         <p class="sub-header__filter-body__filter-options__header">UPLOAD DATE</p>
         <ul>
-          <li v-bind:class="{'active': time === 'hour'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': time === 'hour'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="publishedAfterSearch('hour')">Last hour</span>
             <span @click="publishedAfterSearch('')" class="span active__span">x</span>
           </li>
-          <li v-bind:class="{'active': time === 'today'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': time === 'today'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="publishedAfterSearch('today')">Today</span>
             <span @click="publishedAfterSearch('')" class="span active__span">x</span>
           </li>
-          <li v-bind:class="{'active': time === 'week'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': time === 'week'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="publishedAfterSearch('week')">This week</span>
             <span @click="publishedAfterSearch('')" class="span active__span">x</span>
           </li>
-          <li v-bind:class="{'active': time === 'month'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': time === 'month'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="publishedAfterSearch('month')">This month</span>
             <span @click="publishedAfterSearch('')" class="span active__span">x</span>
           </li>
@@ -36,15 +52,24 @@
       <div class="sub-header__filter-body__filter-options">
         <p class="sub-header__filter-body__filter-options__header">TYPE</p>
         <ul>
-          <li v-bind:class="{'active': type === 'video'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': type === 'video'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="typeSearch('video')">Video</span>
             <span @click="typeSearch('')" class="span active__span">x</span>
           </li>
-          <li v-bind:class="{'active': type === 'channel'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': type === 'channel'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="typeSearch('channel')">Channel</span>
             <span @click="typeSearch('')" class="span active__span">x</span>
           </li>
-          <li v-bind:class="{'active': type === 'playlist'}"  class="sub-header__filter-body__filter-options__li">
+          <li
+            v-bind:class="{'active': type === 'playlist'}"
+            class="sub-header__filter-body__filter-options__li"
+          >
             <span @click="typeSearch('playlist')">Playlist</span>
             <span @click="typeSearch('')" class="span active__span">x</span>
           </li>
@@ -53,18 +78,26 @@
       <div class="sub-header__filter-body__filter-options">
         <p class="sub-header__filter-body__filter-options__header">SORT BY</p>
         <ul>
-          <li @click="orderBy('relevance')" v-bind:class="{'active': order === 'relevance'}"  class="sub-header__filter-body__filter-options__li">
-            Relevance
-          </li>
-          <li @click="orderBy('date')" v-bind:class="{'active': order === 'date'}"  class="sub-header__filter-body__filter-options__li">
-            Upload date
-          </li>
-          <li @click="orderBy('viewCount')" v-bind:class="{'active': order === 'viewCount'}"  class="sub-header__filter-body__filter-options__li">
-            View count
-          </li>
-          <li @click="orderBy('rating')" v-bind:class="{'active': order === 'rating'}"  class="sub-header__filter-body__filter-options__li">
-            Rating
-          </li>
+          <li
+            @click="orderBy('relevance')"
+            v-bind:class="{'active': order === 'relevance'}"
+            class="sub-header__filter-body__filter-options__li"
+          >Relevance</li>
+          <li
+            @click="orderBy('date')"
+            v-bind:class="{'active': order === 'date'}"
+            class="sub-header__filter-body__filter-options__li"
+          >Upload date</li>
+          <li
+            @click="orderBy('viewCount')"
+            v-bind:class="{'active': order === 'viewCount'}"
+            class="sub-header__filter-body__filter-options__li"
+          >View count</li>
+          <li
+            @click="orderBy('rating')"
+            v-bind:class="{'active': order === 'rating'}"
+            class="sub-header__filter-body__filter-options__li"
+          >Rating</li>
         </ul>
       </div>
     </div>
@@ -75,14 +108,14 @@
 import { bus } from "../../main";
 
 export default {
-  name: 'MobileSubHeader',
+  name: "MobileSubHeader",
   data: function() {
     return {
-      publishedAfter: '',
-      time: '',
-      type: '',
-      order: 'relevance',
-      filter: false,
+      publishedAfter: "",
+      time: "",
+      type: "",
+      order: "relevance",
+      filter: false
     };
   },
   methods: {
@@ -92,7 +125,7 @@ export default {
       this.$router.push({
         query: Object.assign({}, this.$route.query, { type })
       });
-      bus.$emit('searchBy', { type: this.type });
+      bus.$emit("searchBy", { type: this.type });
     },
     orderBy(order) {
       if (order === this.order) return;
@@ -100,27 +133,27 @@ export default {
       this.$router.push({
         query: Object.assign({}, this.$route.query, { order })
       });
-      bus.$emit('searchBy', { order: this.order });
+      bus.$emit("searchBy", { order: this.order });
     },
     publishDateCalculate(time) {
       const date = new Date();
-      if (time === 'today') {
+      if (time === "today") {
         date.setDate(date.getDate() - 1);
         this.publishedAfter = date.toISOString();
-      } else if (time === 'week') {
+      } else if (time === "week") {
         date.setDate(date.getDate() - 7);
         this.publishedAfter = date.toISOString();
-      } else if (time === 'month') {
+      } else if (time === "month") {
         date.setDate(date.getDate() - 30);
         this.publishedAfter = date.toISOString();
-      } else if (time === 'hour') {
+      } else if (time === "hour") {
         const splittedDate = date.toISOString().split("T");
         const splittedTime = splittedDate[1].split(":");
         splittedTime[0] = +splittedTime[0] - 1 + "";
         splittedDate[1] = splittedTime.join(":");
         this.publishedAfter = splittedDate.join("T");
       } else {
-        this.publishedAfter = '';
+        this.publishedAfter = "";
       }
     },
     publishedAfterSearch(time) {
@@ -133,7 +166,7 @@ export default {
           time
         })
       });
-      bus.$emit('searchBy', {
+      bus.$emit("searchBy", {
         publishedAfter: this.publishedAfter,
         time
       });
@@ -142,13 +175,13 @@ export default {
   created() {
     this.$route.query.type
       ? (this.type = this.$route.query.type)
-      : (this.type = '');
+      : (this.type = "");
     this.$route.query.time
       ? (this.time = this.$route.query.time)
-      : (this.time = '');
+      : (this.time = "");
     this.$route.query.order
       ? (this.order = this.$route.query.order)
-      : (this.order = 'relevance');
+      : (this.order = "relevance");
     this.publishDateCalculate();
   }
 };
@@ -188,7 +221,6 @@ export default {
         align-self: center;
       }
     }
-
   }
 
   &__filter-body {
@@ -237,9 +269,7 @@ export default {
           cursor: pointer;
         }
       }
-      
     }
-
   }
 
   &__select {

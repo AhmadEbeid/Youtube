@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <template v-if="loading">
-      <DesktopLoader class="mobile-hidden" v-bind:loading="desktopLoader" v-bind:width="loaderWidth"></DesktopLoader>
+      <DesktopLoader
+        class="mobile-hidden"
+        v-bind:loading="desktopLoader"
+        v-bind:width="loaderWidth"
+      ></DesktopLoader>
       <MobileLoader class="desktop-hidden" v-bind:viewText="true"></MobileLoader>
     </template>
     <template v-else>
@@ -37,7 +41,11 @@
         </template>
       </template>
       <template v-if="moreLoading">
-        <DesktopLoader class="mobile-hidden" v-bind:loading="desktopLoader" v-bind:width="loaderWidth"></DesktopLoader>
+        <DesktopLoader
+          class="mobile-hidden"
+          v-bind:loading="desktopLoader"
+          v-bind:width="loaderWidth"
+        ></DesktopLoader>
         <MobileLoader v-bind:viewText="false"></MobileLoader>
       </template>
       <template v-else>
@@ -72,7 +80,7 @@ export default {
     ChannelMediaItem,
     PlaylistMediaItem,
     MobileLoader,
-    DesktopLoader,
+    DesktopLoader
   },
   data: function() {
     return {
@@ -90,7 +98,7 @@ export default {
       channelsResJson: {},
       loaderWidth: 0,
       desktopLoader: true,
-      loaderInterval: null,
+      loaderInterval: null
     };
   },
   methods: {
@@ -133,7 +141,7 @@ export default {
       this.desktopLoaderStart();
 
       const link = [
-        `https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=${process.env.API_KEY}`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=${process.env.VUE_APP_API_KEY}`
       ];
 
       q ? link.push(`&q=${q}`) : "";
@@ -162,7 +170,7 @@ export default {
         if (videoIds.length) {
           const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
             ","
-          )}&part=contentDetails,statistics&key=${process.env.API_KEY}`;
+          )}&part=contentDetails,statistics&key=${process.env.VUE_APP_API_KEY}`;
           const videosRes = await axios.get(videoLink);
           this.videosResJson = videosRes.data.items.reduce((json, value) => {
             json[value.id] = {
@@ -175,7 +183,7 @@ export default {
         if (playlistIds.length) {
           const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${playlistIds.join(
             ","
-          )}&part=contentDetails&key=${process.env.API_KEY}`;
+          )}&part=contentDetails&key=${process.env.VUE_APP_API_KEY}`;
           const playlistsRes = await axios.get(playlistLink);
           this.playlistsResJson = playlistsRes.data.items.reduce(
             (json, value) => {
@@ -188,7 +196,7 @@ export default {
         if (channelIds.length) {
           const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${channelIds.join(
             ","
-          )}&part=statistics&key=${process.env.API_KEY}`;
+          )}&part=statistics&key=${process.env.VUE_APP_API_KEY}`;
           const channelsRes = await axios.get(channelLink);
           this.channelsResJson = channelsRes.data.items.reduce(
             (json, value) => {
@@ -205,6 +213,7 @@ export default {
         this.moreLoading = false;
         this.getDataRunning = false;
       } catch (error) {
+        alert("API KEY quota exceeded");
         console.log(error);
       }
     },
@@ -259,7 +268,7 @@ export default {
       this.getData(searchDetails);
     }
 
-    bus.$on('searchBy', ({ q, type, publishedAfter, order = 'relevance' }) => {
+    bus.$on("searchBy", ({ q, type, publishedAfter, order = "relevance" }) => {
       const searchDetails = {
         q: this.$route.query.q,
         type: this.$route.query.type,

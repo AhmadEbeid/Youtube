@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loader">
-      <div class="loader__body" v-bind:style="'width:' + width + '%'"></div>
+    <div class="loader__body" v-bind:style="'width:' + width + '%'"></div>
   </div>
 </template>
 
@@ -16,14 +16,14 @@ export default {
 
 <style lang="scss" scoped>
 .loader {
-    overflow: hidden;
-    height: 2px;
-    background-color: white;
-    margin: 0px auto;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 99999999;
+  overflow: hidden;
+  height: 2px;
+  background-color: white;
+  margin: 0px auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99999999;
 
   &__body {
     position: relative;

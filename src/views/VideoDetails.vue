@@ -25,10 +25,16 @@
           </p>
         </div>
         <div class="video-details-page__video-sub-info">
-          <img class="video-details-page__video-sub-info__img" v-bind:src="videoData.snippet.thumbnails.default.url" alt />
+          <img
+            class="video-details-page__video-sub-info__img"
+            v-bind:src="videoData.snippet.thumbnails.default.url"
+            alt
+          />
           <div>
             <p class="video-details-page__video-sub-info__title">{{videoData.snippet.channelTitle}}</p>
-            <p class="video-details-page__video-sub-info__info">Published on {{publishedAt(videoData.snippet.publishedAt)}}</p>
+            <p
+              class="video-details-page__video-sub-info__info"
+            >Published on {{publishedAt(videoData.snippet.publishedAt)}}</p>
           </div>
         </div>
         <div class="video-details-page__related-video-container">
@@ -78,7 +84,7 @@ export default {
       desktopFlag: false,
       loaderWidth: 0,
       desktopLoader: true,
-      loaderInterval: null,
+      loaderInterval: null
     };
   },
   methods: {
@@ -103,7 +109,7 @@ export default {
           }
         }, 100);
         this.id = this.$route.params.id;
-        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=${process.env.API_KEY}`;
+        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=${process.env.VUE_APP_API_KEY}`;
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
         else this.$router.push({ path: "/" });
@@ -113,7 +119,7 @@ export default {
         clearInterval(this.loaderInterval);
 
         let videoIds = [];
-        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=${process.env.API_KEY}`;
+        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=${process.env.VUE_APP_API_KEY}`;
         res = await axios.get(relatedLink);
         this.relatedVideos = res.data.items;
         videoIds = this.relatedVideos
@@ -122,7 +128,7 @@ export default {
 
         const RealtedVideosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
           ","
-        )}&part=contentDetails,statistics&key=${process.env.API_KEY}`;
+        )}&part=contentDetails,statistics&key=${process.env.VUE_APP_API_KEY}`;
         res = await axios.get(RealtedVideosLink);
         this.videosResJson = res.data.items.reduce((json, value) => {
           json[value.id] = {
@@ -133,11 +139,12 @@ export default {
         }, {});
         this.loading2 = false;
       } catch (error) {
+        alert("API KEY quota exceeded");
         console.log(error);
       }
     },
     publishedAt(date) {
-      date = (new Date(date)).toDateString().split(" ")
+      date = new Date(date).toDateString().split(" ");
       return date[2] + " " + date[1] + " " + date[3];
     }
   },
@@ -254,7 +261,6 @@ export default {
       background-color: white;
       display: flex;
       align-items: center;
-      
 
       &__img {
         width: 70px;
