@@ -114,8 +114,11 @@ export default {
         date.setDate(date.getDate() - 30);
         this.publishedAfter = date.toISOString();
       } else if (time === 'hour') {
-        date.setDate(date.getDate() - 1/24);
-        this.publishedAfter = date.toISOString();
+        const splittedDate = date.toISOString().split("T");
+        const splittedTime = splittedDate[1].split(":");
+        splittedTime[0] = +splittedTime[0] - 1 + "";
+        splittedDate[1] = splittedTime.join(":");
+        this.publishedAfter = splittedDate.join("T");
       } else {
         this.publishedAfter = '';
       }
