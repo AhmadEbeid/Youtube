@@ -103,7 +103,7 @@ export default {
           }
         }, 100);
         this.id = this.$route.params.id;
-        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
+        const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=${process.env.API_KEY}`;
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
         else this.$router.push({ path: "/" });
@@ -113,7 +113,7 @@ export default {
         clearInterval(this.loaderInterval);
 
         let videoIds = [];
-        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
+        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=${process.env.API_KEY}`;
         res = await axios.get(relatedLink);
         this.relatedVideos = res.data.items;
         videoIds = this.relatedVideos
@@ -122,7 +122,7 @@ export default {
 
         const RealtedVideosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
           ","
-        )}&part=contentDetails,statistics&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
+        )}&part=contentDetails,statistics&key=${process.env.API_KEY}`;
         res = await axios.get(RealtedVideosLink);
         this.videosResJson = res.data.items.reduce((json, value) => {
           json[value.id] = {

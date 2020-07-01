@@ -133,7 +133,7 @@ export default {
       this.desktopLoaderStart();
 
       const link = [
-        `https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet,id&maxResults=20&key=${process.env.API_KEY}`
       ];
 
       q ? link.push(`&q=${q}`) : "";
@@ -162,7 +162,7 @@ export default {
         if (videoIds.length) {
           const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
             ","
-          )}&part=contentDetails,statistics&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
+          )}&part=contentDetails,statistics&key=${process.env.API_KEY}`;
           const videosRes = await axios.get(videoLink);
           this.videosResJson = videosRes.data.items.reduce((json, value) => {
             json[value.id] = {
@@ -175,7 +175,7 @@ export default {
         if (playlistIds.length) {
           const playlistLink = `https://www.googleapis.com/youtube/v3/playlists?id=${playlistIds.join(
             ","
-          )}&part=contentDetails&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
+          )}&part=contentDetails&key=${process.env.API_KEY}`;
           const playlistsRes = await axios.get(playlistLink);
           this.playlistsResJson = playlistsRes.data.items.reduce(
             (json, value) => {
@@ -188,7 +188,7 @@ export default {
         if (channelIds.length) {
           const channelLink = `https://www.googleapis.com/youtube/v3/channels?id=${channelIds.join(
             ","
-          )}&part=statistics&key=AIzaSyDTLe4ePjYTGbavTbhklPIa9FS6yDeI3No`;
+          )}&part=statistics&key=${process.env.API_KEY}`;
           const channelsRes = await axios.get(channelLink);
           this.channelsResJson = channelsRes.data.items.reduce(
             (json, value) => {
