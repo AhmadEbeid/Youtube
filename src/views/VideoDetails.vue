@@ -9,12 +9,12 @@
         <div class="video-details-page__video-container">
           <iframe
             class="video-details-page__video-container__iframe"
-            v-bind:src="'https://www.youtube.com/embed/' + id"
+            v-bind:src="videoLink"
           ></iframe>
         </div>
         <div class="video-details-page__video-info">
           <h1 class="video-details-page__video-info__title">{{ videoData.snippet.title }}</h1>
-          <p class="video-details-page__video-info__sub-title">
+          <p v-if="videoFLag" class="video-details-page__video-info__sub-title">
             <span class="video-details-page__video-info__sub-title__span">
               <span v-if="!desktopFlag">{{ this.videoData.snippet.channelTitle }}</span>
               {{
@@ -43,14 +43,12 @@
           </template>
           <template v-else>
             <template v-for="(item, index) in relatedVideos">
-              <template v-if="item.id.kind === 'youtube#video'">
                 <VideoMediaItem
                   v-bind:key="index"
                   v-bind:item="item"
                   v-bind:statisticsInfo="videosResJson[item.id.videoId]"
                   v-bind:videoPageFlag="desktopFlag"
                 />
-              </template>
             </template>
           </template>
         </div>
@@ -76,6 +74,7 @@ export default {
   data: function() {
     return {
       id: "",
+      videoLink: "",
       videoData: {},
       relatedVideos: [],
       videosResJson: {},
@@ -84,11 +83,12 @@ export default {
       desktopFlag: false,
       loaderWidth: 0,
       desktopLoader: true,
-      loaderInterval: null
+      loaderInterval: null,
+      videoFLag: true,
     };
   },
   methods: {
-    async getData() {
+    async getVideoData() {
       try {
         this.loading = true;
         this.desktopLoader = true;
@@ -109,6 +109,7 @@ export default {
           }
         }, 100);
         this.id = this.$route.params.id;
+        this.videoLink = `https://www.youtube.com/embed/${this.id}`;
         const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=${process.env.VUE_APP_API_KEY}`;
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
@@ -119,12 +120,72 @@ export default {
         clearInterval(this.loaderInterval);
 
         let videoIds = [];
-        const relatedLink = `https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&maxResults=5&key=${process.env.VUE_APP_API_KEY}`;
+        const relatedLink = `https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${this.id}&part=snippet,id&maxResults=5&type=video&key=${process.env.VUE_APP_API_KEY}`;
         res = await axios.get(relatedLink);
         this.relatedVideos = res.data.items;
         videoIds = this.relatedVideos
           .filter(item => item.id.kind === "youtube#video")
           .map(item => item.id.videoId);
+
+        const RealtedVideosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
+          ","
+        )}&part=contentDetails,statistics&key=${process.env.VUE_APP_API_KEY}`;
+        res = await axios.get(RealtedVideosLink);
+        this.videosResJson = res.data.items.reduce((json, value) => {
+          json[value.id] = {
+            stats: value.statistics,
+            contentDetails: value.contentDetails
+          };
+          return json;
+        }, {});
+        this.loading2 = false;
+      } catch (error) {
+        alert("API KEY quota exceeded");
+        console.log(error);
+      }
+    },
+    async getPlaylistData() {
+      try {
+        this.loading = true;
+        this.desktopLoader = true;
+        this.loaderWidth = 0;
+        let loaderRest = false;
+        this.loaderInterval = setInterval(() => {
+          if (!loaderRest) this.loaderWidth++;
+          if (this.loaderWidth === 100) {
+            loaderRest = true;
+            setTimeout(() => {
+              this.desktopLoader = false;
+              this.loaderWidth = 0;
+              setTimeout(() => {
+                this.desktopLoader = true;
+                loaderRest = false;
+              }, 100);
+            }, 800);
+          }
+        }, 100);
+
+        this.id = this.$route.params.id;
+        this.videoLink = `https://www.youtube.com/embed/videoseries?list=${this.id}`;
+        const videoLink = `https://www.googleapis.com/youtube/v3/playlists?id=${this.id}&part=snippet,contentDetails&key=${process.env.VUE_APP_API_KEY}`;
+
+        let res = await axios.get(videoLink);
+        if (res.data.items.length > 0) this.videoData = res.data.items[0];
+        else this.$router.push({ path: "/" });
+        this.loading = false;
+        this.loaderWidth = 100;
+        this.desktopLoader = false;
+        clearInterval(this.loaderInterval);
+
+        let videoIds = [];
+        const relatedLink = `https://www.googleapis.com/youtube/v3/playlistItems?maxResults=50&part=snippet,id&playlistId=${this.id}&key=${process.env.VUE_APP_API_KEY}`;
+        res = await axios.get(relatedLink);
+        this.relatedVideos = res.data.items;
+        this.relatedVideos = this.relatedVideos.map(item => {
+          item.id = item.snippet.resourceId
+          return item;
+        });
+        videoIds = this.relatedVideos.map(item => item.id.videoId);
 
         const RealtedVideosLink = `https://www.googleapis.com/youtube/v3/videos?id=${videoIds.join(
           ","
@@ -150,12 +211,17 @@ export default {
   },
   created() {
     if (window.innerWidth >= 768) this.desktopFlag = true;
-    this.getData();
     bus.$emit("resetHeaderTitle");
+
+    if (this.$route.name === "Video") this.getVideoData();
+    if (this.$route.name === "Playlist") {
+      this.getPlaylistData();
+      this.videoFLag = false;
+    };
   },
   watch: {
     $route() {
-      this.getData();
+      if (this.$route.name === "Video") this.getVideoData();
     }
   }
 };

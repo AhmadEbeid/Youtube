@@ -1,5 +1,7 @@
 <template>
-  <div v-if="loaded && item.snippet.thumbnails" class="playlist-media-item">
+  <div v-if="loaded && item.snippet.thumbnails" 
+  class="playlist-media-item"
+  @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } })">
     <div class="playlist-media-item__image-container">
       <img
         class="playlist-media-item__image-container__img"

@@ -18,6 +18,11 @@ const routes = [
     component: VideoDetails,
   },
   {
+    path: "/playlist/:id",
+    name: "Playlist",
+    component: VideoDetails,
+  },
+  {
     path: "/channel/:id",
     name: "Channel",
     component: ChannelDetails,
