@@ -56,7 +56,7 @@
 
 <script>
 import axios from "axios";
-import { bus } from "../main";
+import { bus } from "../event-bus";
 import MobileLoader from "@/components/mobile/MobileLoader.vue";
 import DesktopLoader from "@/components/desktop/DesktopLoader.vue";
 import VideoMediaItem from "@/components/common/VideoMediaItem.vue";

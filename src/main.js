@@ -1,10 +1,9 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+import "./event-bus.js";
 
 Vue.config.productionTip = false;
-
-export const bus = new Vue();
 
 new Vue({
   router,

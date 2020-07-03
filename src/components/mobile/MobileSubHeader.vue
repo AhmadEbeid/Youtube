@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { bus } from "../../main";
+import { bus } from "../../event-bus";
 
 export default {
   name: "MobileSubHeader",

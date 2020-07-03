@@ -10,27 +10,27 @@ const routes = [
   {
     path: "/search",
     name: "Home",
-    component: Home,
+    component: Home
   },
   {
     path: "/video/:id",
     name: "Video",
-    component: VideoDetails,
+    component: VideoDetails
   },
   {
     path: "/playlist/:id",
     name: "Playlist",
-    component: VideoDetails,
+    component: VideoDetails
   },
   {
     path: "/channel/:id",
     name: "Channel",
-    component: ChannelDetails,
+    component: ChannelDetails
   },
   {
     path: "*",
-    redirect: { name: "Home" },
-  },
+    redirect: { name: "Home" }
+  }
 ];
 
 const router = new VueRouter({
@@ -43,7 +43,7 @@ const router = new VueRouter({
     } else {
       return { x: 0, y: 0 };
     }
-  },
+  }
 });
 
 export default router;
