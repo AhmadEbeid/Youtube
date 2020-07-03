@@ -10,7 +10,7 @@
     </template>
     <template v-else>
       <MobileSubHeader class="desktop-hidden" />
-      <DesktopSubHeader class="mobile-hidden" />
+      <DesktopSubHeader v-bind:totalResults="totalResults" class="mobile-hidden" />
       <template v-for="(item, index) in mediaItems">
         <template
           v-if="item.id.kind === 'youtube#video' && ($route.query.type === 'video' || !$route.query.type)"

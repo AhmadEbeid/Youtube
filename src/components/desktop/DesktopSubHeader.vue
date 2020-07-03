@@ -2,7 +2,7 @@
   <div class="sub-header">
     <div class="sub-header__filter-header">
       <div class="sub-header__filter-header__text">
-        <p>About 13,0000 Results</p>
+        <p>About {{Number(totalResults).toLocaleString()}} Results</p>
       </div>
       <div @click="filter = !filter" class="sub-header__filter-header__filter">
         <img
@@ -117,6 +117,9 @@ export default {
       order: "relevance",
       filter: false
     };
+  },
+  props: {
+    totalResults: Number
   },
   methods: {
     typeSearch(type) {
