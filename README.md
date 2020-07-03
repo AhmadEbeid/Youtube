@@ -1,4 +1,4 @@
-# youtube_instabug_task
+# youtube
 
 ## Project setup
 ```
