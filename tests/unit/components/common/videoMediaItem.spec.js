@@ -44,15 +44,15 @@ function getHowOld(publishTime) {
         : "less than a day ago";
 }
 
-var map = {amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'"}
+var map = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" }
 
 describe("VideoMediaItem.vue", () => {
   it("renders correct content when all props passed", () => {
-    
+
     const item = { "kind": "youtube#searchResult", "etag": "zPH3_AsOpHx3iP6TyasyvCW-sok", "id": { "kind": "youtube#video", "videoId": "NIOIKdylRcM" }, "snippet": { "publishedAt": "2020-06-24T00:14:49Z", "channelId": "UCSWwb_YyNB8vuC1VDcfPPaQ", "title": "Annie Jones: Shy 12-Year-Old Aussie Girl SLAYS &quot;Dance Monkey&quot; On @America&#39;s Got Talent", "description": "America's Got Talent | Season 15 | Auditions Week 5 #AGT #AmericasGotTalent #TalentRecap For more HD videos, news, analysis and recaps of America's Got ...", "thumbnails": { "default": { "url": "https://i.ytimg.com/vi/NIOIKdylRcM/default.jpg", "width": 120, "height": 90 }, "medium": { "url": "https://i.ytimg.com/vi/NIOIKdylRcM/mqdefault.jpg", "width": 320, "height": 180 }, "high": { "url": "https://i.ytimg.com/vi/NIOIKdylRcM/hqdefault.jpg", "width": 480, "height": 360 } }, "channelTitle": "Talent Recap", "liveBroadcastContent": "none", "publishTime": "2020-06-24T00:14:49Z" }, "statisticsInfo": { "stats": { "viewCount": "870994", "likeCount": "22670", "dislikeCount": "425", "favoriteCount": "0", "commentCount": "1009" }, "contentDetails": { "duration": "PT4M56S", "dimension": "2d", "definition": "hd", "caption": "false", "licensedContent": false, "contentRating": {}, "projection": "rectangular" } } };
     const statisticsInfo = { "stats": { "viewCount": "870994", "likeCount": "22670", "dislikeCount": "425", "favoriteCount": "0", "commentCount": "1009" }, "contentDetails": { "duration": "PT4M56S", "dimension": "2d", "definition": "hd", "caption": "false", "licensedContent": false, "contentRating": {}, "projection": "rectangular" } };
     const videoPageFlag = true;
-    
+
     const wrapper = shallowMount(VideoMediaItem, {
       propsData: {
         item,
@@ -74,11 +74,9 @@ describe("VideoMediaItem.vue", () => {
     expect(wrapper.findAll('p').at(4).text()).toMatch(item.snippet.description.replace(/&([^;]+);/g, (m, c) => map[c]));
 
   });
-});
 
-describe("VideoMediaItem.vue", () => {
   it("no component renders when item is null or undefined", () => {
-       
+
     const wrapper = shallowMount(VideoMediaItem, {
       propsData: {
         item: null,
@@ -90,4 +88,5 @@ describe("VideoMediaItem.vue", () => {
     expect(wrapper.findAll('div').length).toBe(0);
 
   });
+
 });

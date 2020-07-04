@@ -30,18 +30,16 @@ describe("PlaylistMediaItem.vue", () => {
 
   });
 
-  describe("PlaylistMediaItem.vue", () => {
-    it("no component renders when item is null or undefined", () => {
-         
-      const wrapper = shallowMount(PlaylistMediaItem, {
-        propsData: {
-          item: null,
-        }
-      });
-  
-      expect(wrapper.findAll('div').length).toBe(0);
-  
+  it("no component renders when item is null or undefined", () => {
+       
+    const wrapper = shallowMount(PlaylistMediaItem, {
+      propsData: {
+        item: null,
+      }
     });
-  });
 
+    expect(wrapper.findAll('div').length).toBe(0);
+
+  });
+  
 });

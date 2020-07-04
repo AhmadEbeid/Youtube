@@ -27,3 +27,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Desciption
+```
+The app is like a small youtube, where you can view videos based on search and filter option
+```
