@@ -3,7 +3,7 @@
     v-if="item && item.snippet.thumbnails.medium"
     class="playlist-media-item"
     v-bind:class="{ 'playlist-media-item-padding-channel-page': channelPageFlag }"
-    @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } })"
+    @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } }).catch(()=>{})"
   >
     <div class="playlist-media-item__image-container">
       <img

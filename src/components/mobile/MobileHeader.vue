@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     goHome() {
-      this.$router.push({ name: "Home" });
+      this.$router.push({ name: "Home" }).catch(()=>{});
       bus.$emit("searchBy", {
         q: "",
         type: "",
@@ -61,11 +61,11 @@ export default {
     },
     search() {
       // this.$router.replace.({ query: {q: this.searchInput} })
-      this.$router.push({ name: "Home" });
+      this.$router.push({ name: "Home" }).catch(()=>{});
       if (this.$route.query.q !== this.searchInput) {
         this.$router.push({
           query: Object.assign({}, this.$route.query, { q: this.searchInput })
-        });
+        }).catch(()=>{});
         bus.$emit("searchBy", { q: this.searchInput });
 
         this.title = this.searchInput;

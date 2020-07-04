@@ -104,7 +104,7 @@ export default {
 
         let res = await axios.get(channelLink);
         if (res.data.items.length > 0) this.channelData = res.data.items[0];
-        else this.$router.push({ path: "/" });
+        else this.$router.push({ path: "/" }).catch(()=>{});
         this.loading = false;
         this.loaderWidth = 100;
         this.desktopLoader = false;

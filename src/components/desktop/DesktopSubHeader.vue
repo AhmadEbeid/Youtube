@@ -127,7 +127,7 @@ export default {
       this.type = type;
       this.$router.push({
         query: Object.assign({}, this.$route.query, { type })
-      });
+      }).catch(()=>{});
       bus.$emit("searchBy", { type: this.type });
     },
     orderBy(order) {
@@ -135,7 +135,7 @@ export default {
       this.order = order;
       this.$router.push({
         query: Object.assign({}, this.$route.query, { order })
-      });
+      }).catch(()=>{});
       bus.$emit("searchBy", { order: this.order });
     },
     publishDateCalculate(time) {
@@ -168,7 +168,7 @@ export default {
           publishedAfter: this.publishedAfter,
           time
         })
-      });
+      }).catch(()=>{});
       bus.$emit("searchBy", {
         publishedAfter: this.publishedAfter,
         time

@@ -110,7 +110,7 @@ export default {
         const videoLink = `https://www.googleapis.com/youtube/v3/videos?id=${this.id}&part=snippet,contentDetails,statistics&key=${process.env.VUE_APP_API_KEY}`;
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
-        else this.$router.push({ path: "/" });
+        else this.$router.push({ path: "/" }).catch(()=>{});
         this.loading = false;
         this.loaderWidth = 100;
         this.desktopLoader = false;
@@ -168,7 +168,7 @@ export default {
 
         let res = await axios.get(videoLink);
         if (res.data.items.length > 0) this.videoData = res.data.items[0];
-        else this.$router.push({ path: "/" });
+        else this.$router.push({ path: "/" }).catch(()=>{});
         this.loading = false;
         this.loaderWidth = 100;
         this.desktopLoader = false;

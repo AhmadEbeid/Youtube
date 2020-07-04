@@ -2,7 +2,7 @@
   <div
     v-if="item && item.snippet.thumbnails.medium"
     v-bind:class="{'video-page-video-media-item': videoPageFlag, 'video-media-item': !videoPageFlag}"
-    @click="$router.push({ name: 'Video', params: { id: item.id.videoId } })"
+    @click="$router.push({ name: 'Video', params: { id: item.id.videoId } }).catch(()=>{})"
   >
     <div
       v-bind:class="{'video-page-video-media-item__image-container': videoPageFlag, 'video-media-item__image-container': !videoPageFlag}"
