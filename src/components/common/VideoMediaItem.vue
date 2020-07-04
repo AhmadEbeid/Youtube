@@ -1,6 +1,5 @@
-<template>
+<template v-if="item.snippet.thumbnails.medium">
   <div
-    v-if="loaded"
     v-bind:class="{'video-page-video-media-item': videoPageFlag, 'video-media-item': !videoPageFlag}"
     @click="$router.push({ name: 'Video', params: { id: item.id.videoId } })"
   >
@@ -13,9 +12,9 @@
         alt
       />
       <span
-        v-if="item.statisticsInfo"
+        v-if="statisticsInfo"
         v-bind:class="{'video-page-video-media-item__image-container__span': videoPageFlag, 'video-media-item__image-container__span': !videoPageFlag}"
-      >{{ getDuration(item.statisticsInfo.contentDetails.duration) }}</span>
+      >{{ getDuration(statisticsInfo.contentDetails.duration) }}</span>
     </div>
     <div
       v-bind:class="{'video-page-video-media-item__body-container': videoPageFlag, 'video-media-item__body-container': !videoPageFlag}"
@@ -31,14 +30,13 @@
         v-bind:class="{'video-page-video-media-item__body-container__separator': videoPageFlag, 'video-media-item__body-container__separator': !videoPageFlag}"
       >•</span>
       <p
-        v-if="item.statisticsInfo"
+        v-if="statisticsInfo"
         v-bind:class="{'video-page-video-media-item__body-container__views': videoPageFlag, 'video-media-item__body-container__views': !videoPageFlag}"
-      >{{ Number(item.statisticsInfo.stats.viewCount).toLocaleString() }} views</p>
+      >{{ Number(statisticsInfo.stats.viewCount).toLocaleString() }} views</p>
       <span
         v-bind:class="{'video-page-video-media-item__body-container__separator': videoPageFlag, 'video-media-item__body-container__separator': !videoPageFlag}"
       >•</span>
       <p
-        v-if="item.statisticsInfo"
         v-bind:class="{'video-page-video-media-item__body-container__how-old': videoPageFlag, 'video-media-item__body-container__how-old': !videoPageFlag}"
       >{{ getHowOld(item.snippet.publishTime) }}</p>
       <p
@@ -52,11 +50,6 @@
 <script>
 export default {
   name: "VideoMediaItem",
-  data: function() {
-    return {
-      loaded: false
-    };
-  },
   props: {
     item: Object,
     statisticsInfo: Object,
@@ -104,10 +97,6 @@ export default {
         ? daysDisplay
         : "less than a day ago";
     }
-  },
-  created() {
-    this.item.statisticsInfo = this.statisticsInfo;
-    this.loaded = true;
   }
 };
 </script>
@@ -175,21 +164,19 @@ export default {
     }
 
     &__how-old {
-      display: none !important;
+      display: none;
       color: #000000ad;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     }
 
     &__description {
-      display: none !important;
+      display: none;
       color: #000000ad;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
     }
@@ -225,13 +212,13 @@ export default {
       }
 
       &__how-old {
-        display: inline !important;
+        display: inline;
         font-size: 16px;
       }
 
       &__description {
         margin-top: 15px;
-        display: -webkit-box !important;
+        display: -webkit-box;
         font-size: 18px;
       }
     }
@@ -300,21 +287,19 @@ export default {
     }
 
     &__how-old {
-      display: none !important;
+      display: none;
       color: #000000ad;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     }
 
     &__description {
-      display: none !important;
+      display: none;
       color: #000000ad;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
     }

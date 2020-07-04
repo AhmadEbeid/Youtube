@@ -1,6 +1,5 @@
-<template>
+<template v-if="item.snippet.thumbnails.medium">
   <div
-    v-if="loaded"
     class="channel-media-item"
     @click="$router.push({ name: 'Channel', params: { id: item.id.channelId } })"
   >
@@ -8,13 +7,13 @@
     <div class="channel-media-item__body-container">
       <p class="channel-media-item__body-container__title" v-html="item.snippet.title"></p>
       <p
-        v-if="item.statistics"
+        v-if="statistics"
         class="channel-media-item__body-container__video-count"
-      >{{ Number(item.statistics.videoCount).toLocaleString() }} videos</p>
+      >{{ Number(statistics.videoCount).toLocaleString() }} videos</p>
       <p
-        v-if="item.statistics"
+        v-if="statistics"
         class="channel-media-item__body-container__subscribers"
-      >{{ Number(item.statistics.subscriberCount).toLocaleString() }} subscribers</p>
+      >{{ Number(statistics.subscriberCount).toLocaleString() }} subscribers</p>
       <p class="channel-media-item__body-container__description" v-html="item.snippet.description"></p>
     </div>
   </div>
@@ -23,18 +22,9 @@
 <script>
 export default {
   name: "ChannelMediaItem",
-  data: function() {
-    return {
-      loaded: false
-    };
-  },
   props: {
     item: Object,
     statistics: Object
-  },
-  created() {
-    this.item.statistics = this.statistics;
-    this.loaded = true;
   }
 };
 </script>

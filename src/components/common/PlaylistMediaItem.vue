@@ -1,6 +1,5 @@
-<template>
+<template v-if="item.snippet.thumbnails.medium">
   <div
-    v-if="loaded && item.snippet.thumbnails"
     class="playlist-media-item"
     v-bind:class="{ 'playlist-media-item-padding-channel-page': channelPageFlag }"
     @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } })"
@@ -11,10 +10,10 @@
         v-bind:src="item.snippet.thumbnails.medium.url"
         alt
       />
-      <div v-if="item.contentDetails" class="playlist-media-item__image-container__div">
+      <div v-if="contentDetails" class="playlist-media-item__image-container__div">
         <span
           class="playlist-media-item__image-container__div__span"
-        >{{ item.contentDetails.itemCount }}</span>
+        >{{ Number(contentDetails.itemCount).toLocaleString() }}</span>
         <img
           class="playlist-media-item__image-container__div__img"
           src="../../assets/playlist-count.svg"
@@ -33,19 +32,10 @@
 <script>
 export default {
   name: "PlaylistMediaItem",
-  data: function() {
-    return {
-      loaded: false
-    };
-  },
   props: {
     item: Object,
     contentDetails: Object,
     channelPageFlag: Boolean
-  },
-  created() {
-    this.item.contentDetails = this.contentDetails;
-    this.loaded = true;
   }
 };
 </script>
