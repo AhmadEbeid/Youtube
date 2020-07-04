@@ -1,5 +1,6 @@
-<template v-if="item.snippet.thumbnails.medium">
+<template>
   <div
+    v-if="item && item.snippet.thumbnails.medium"
     class="playlist-media-item"
     v-bind:class="{ 'playlist-media-item-padding-channel-page': channelPageFlag }"
     @click="$router.push({ name: 'Playlist', params: { id: item.id.playlistId } })"

@@ -29,4 +29,19 @@ describe("PlaylistMediaItem.vue", () => {
     expect(wrapper.findAll('p').at(2).text()).toMatch(item.snippet.description.replace(/&([^;]+);/g, (m, c) => map[c]));
 
   });
+
+  describe("PlaylistMediaItem.vue", () => {
+    it("no component renders when item is null or undefined", () => {
+         
+      const wrapper = shallowMount(PlaylistMediaItem, {
+        propsData: {
+          item: null,
+        }
+      });
+  
+      expect(wrapper.findAll('div').length).toBe(0);
+  
+    });
+  });
+
 });

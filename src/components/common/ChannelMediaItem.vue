@@ -1,5 +1,6 @@
-<template v-if="item.snippet.thumbnails.medium">
+<template>
   <div
+    v-if="item && item.snippet.thumbnails.medium"
     class="channel-media-item"
     @click="$router.push({ name: 'Channel', params: { id: item.id.channelId } })"
   >

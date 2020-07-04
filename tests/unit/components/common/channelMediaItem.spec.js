@@ -24,4 +24,19 @@ describe("ChannelMediaItem.vue", () => {
     expect(wrapper.findAll('p').at(3).text()).toMatch(item.snippet.description.replace(/&([^;]+);/g, (m, c) => map[c]));
 
   });
+
+  describe("ChannelMediaItem.vue", () => {
+    it("no component renders when item is null or undefined", () => {
+         
+      const wrapper = shallowMount(ChannelMediaItem, {
+        propsData: {
+          item: null,
+        }
+      });
+  
+      expect(wrapper.findAll('div').length).toBe(0);
+  
+    });
+  });
+
 });

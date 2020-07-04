@@ -75,3 +75,19 @@ describe("VideoMediaItem.vue", () => {
 
   });
 });
+
+describe("VideoMediaItem.vue", () => {
+  it("no component renders when item is null or undefined", () => {
+       
+    const wrapper = shallowMount(VideoMediaItem, {
+      propsData: {
+        item: null,
+        statisticsInfo: {},
+        videoPageFlag: false
+      }
+    });
+
+    expect(wrapper.findAll('div').length).toBe(0);
+
+  });
+});
